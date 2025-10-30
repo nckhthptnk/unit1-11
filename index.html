@@ -18,6 +18,12 @@
             height: 300px;
         }
         
+        @media (max-width: 640px) {
+            .flashcard {
+                height: 250px;
+            }
+        }
+        
         .flashcard-inner {
             position: relative;
             width: 100%;
@@ -92,122 +98,130 @@
   <style>@view-transition { navigation: auto; }</style>
  </head>
  <body class="min-h-full bg-gradient-to-br from-blue-50 to-indigo-100">
-  <div class="container mx-auto px-4 py-6 max-w-6xl"><!-- Header -->
-   <header class="text-center mb-8">
-    <div class="flex justify-between items-center mb-4"><a href="https://nckhthptnk.github.io/tienganh11/" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2"> <span class="text-lg">🏠</span> <span class="font-medium">Trang chủ</span> </a>
+  <div class="container mx-auto px-2 sm:px-4 py-3 sm:py-6 max-w-6xl"><!-- Header -->
+   <header class="text-center mb-4 sm:mb-8"><!-- Mobile Layout -->
+    <div class="block sm:hidden">
+     <div class="flex justify-center mb-3"><a href="https://nckhthptnk.github.io/tienganh11/" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 text-sm"> <span class="text-base">🏠</span> <span class="font-medium">Trang chủ</span> </a>
+     </div>
+     <div class="px-2">
+      <h1 id="unit-title-mobile" class="text-base font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 leading-tight">Unit 1: Generation Gap and Independent Life</h1>
+      <p class="text-xs text-gray-600 font-medium px-2 leading-relaxed"><span class="text-lg">✨</span> Chào mừng bạn đến với bài học Tiếng Anh cùng Mega Master 11 nhé! <span class="text-lg">📚</span></p>
+     </div>
+    </div><!-- Desktop Layout -->
+    <div class="hidden sm:flex justify-between items-center mb-4"><a href="https://nckhthptnk.github.io/tienganh11/" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2"> <span class="text-lg">🏠</span> <span class="font-medium">Trang chủ</span> </a>
      <div class="text-center">
-      <h1 id="unit-title" class="text-xl sm:text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">Unit 1: Generation Gap and Independent Life</h1>
-      <p class="text-sm sm:text-base text-gray-600 font-medium flex items-center justify-center gap-2"><span class="text-2xl">✨</span> Chào mừng bạn đến với bài học Tiếng Anh cùng Mega Master 11 nhé! <span class="text-2xl">📚</span></p>
+      <h1 id="unit-title" class="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">Unit 1: Generation Gap and Independent Life</h1>
+      <p class="text-xs sm:text-sm text-gray-600 font-medium flex items-center justify-center gap-2"><span class="text-2xl">✨</span> Chào mừng bạn đến với bài học Tiếng Anh cùng Mega Master 11 nhé! <span class="text-2xl">📚</span></p>
      </div>
      <div class="w-32"></div>
     </div>
    </header><!-- Progress Section -->
-   <div class="bg-gradient-to-r from-white to-blue-50 rounded-2xl shadow-xl p-6 mb-8 border border-blue-100">
-    <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2"><span class="text-xl sm:text-2xl">📊</span> Tiến độ học tập của bạn</h2>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-     <div class="text-center bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-2xl sm:text-3xl mb-2">
+   <div class="bg-gradient-to-r from-white to-blue-50 rounded-2xl shadow-xl p-3 sm:p-6 mb-4 sm:mb-8 border border-blue-100">
+    <h2 class="text-sm sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-6 flex items-center gap-2"><span class="text-base sm:text-xl">📊</span> Tiến độ học tập của bạn</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6">
+     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
+      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
        🎯
       </div>
-      <div class="text-xl sm:text-2xl font-bold text-blue-600" id="total-progress">
+      <div class="text-sm sm:text-xl font-bold text-blue-600" id="total-progress">
        0%
       </div>
-      <div class="text-xs sm:text-sm text-gray-600 font-medium">
+      <div class="text-xs text-gray-600 font-medium">
        Tổng tiến độ
       </div>
-      <div class="w-full bg-gray-200 rounded-full h-3 mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full progress-bar transition-all duration-500" id="total-bar" style="width: 0%"></div>
+      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
+       <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="total-bar" style="width: 0%"></div>
       </div>
      </div>
-     <div class="text-center bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-2xl sm:text-3xl mb-2">
+     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
+      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
        📝
       </div>
-      <div class="text-xl sm:text-2xl font-bold text-green-600" id="vocab-progress">
+      <div class="text-sm sm:text-xl font-bold text-green-600" id="vocab-progress">
        0%
       </div>
-      <div class="text-xs sm:text-sm text-gray-600 font-medium">
+      <div class="text-xs text-gray-600 font-medium">
        Từ vựng
       </div>
-      <div class="w-full bg-gray-200 rounded-full h-3 mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full progress-bar transition-all duration-500" id="vocab-bar" style="width: 0%"></div>
+      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
+       <div class="bg-gradient-to-r from-green-500 to-green-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="vocab-bar" style="width: 0%"></div>
       </div>
      </div>
-     <div class="text-center bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-2xl sm:text-3xl mb-2">
+     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
+      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
        📖
       </div>
-      <div class="text-xl sm:text-2xl font-bold text-purple-600" id="reading-progress">
+      <div class="text-sm sm:text-xl font-bold text-purple-600" id="reading-progress">
        0%
       </div>
-      <div class="text-xs sm:text-sm text-gray-600 font-medium">
+      <div class="text-xs text-gray-600 font-medium">
        Bài đọc
       </div>
-      <div class="w-full bg-gray-200 rounded-full h-3 mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full progress-bar transition-all duration-500" id="reading-bar" style="width: 0%"></div>
+      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
+       <div class="bg-gradient-to-r from-purple-500 to-purple-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="reading-bar" style="width: 0%"></div>
       </div>
      </div>
-     <div class="text-center bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-2xl sm:text-3xl mb-2">
+     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
+      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
        📚
       </div>
-      <div class="text-xl sm:text-2xl font-bold text-orange-600" id="grammar-progress">
+      <div class="text-sm sm:text-xl font-bold text-orange-600" id="grammar-progress">
        0%
       </div>
-      <div class="text-xs sm:text-sm text-gray-600 font-medium">
+      <div class="text-xs text-gray-600 font-medium">
        Ngữ pháp
       </div>
-      <div class="w-full bg-gray-200 rounded-full h-3 mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full progress-bar transition-all duration-500" id="grammar-bar" style="width: 0%"></div>
+      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
+       <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="grammar-bar" style="width: 0%"></div>
       </div>
      </div>
     </div>
    </div><!-- Content Selection Tabs -->
-   <div class="bg-white rounded-2xl shadow-xl mb-8 overflow-hidden">
-    <div class="flex border-b border-gray-100"><button class="tab-btn flex-1 py-5 px-6 text-center font-medium transition-all duration-300 border-b-3 border-blue-600 text-blue-600 bg-blue-50 flex items-center justify-center gap-2" data-tab="vocabulary"> <span class="text-xl">📝</span> <span class="hidden sm:inline">Từ vựng</span> <span class="sm:hidden">Vocab</span> </button> <button class="tab-btn flex-1 py-5 px-6 text-center font-medium transition-all duration-300 border-b-3 border-transparent text-gray-600 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center gap-2" data-tab="reading"> <span class="text-xl">📖</span> <span class="hidden sm:inline">Bài đọc</span> <span class="sm:hidden">Reading</span> </button> <button class="tab-btn flex-1 py-5 px-6 text-center font-medium transition-all duration-300 border-b-3 border-transparent text-gray-600 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center gap-2" data-tab="grammar"> <span class="text-xl">📚</span> <span class="hidden sm:inline">Ngữ pháp</span> <span class="sm:hidden">Grammar</span> </button>
+   <div class="bg-white rounded-2xl shadow-xl mb-4 sm:mb-8 overflow-hidden">
+    <div class="flex border-b border-gray-100"><button class="tab-btn flex-1 py-3 sm:py-5 px-2 sm:px-6 text-center font-medium transition-all duration-300 border-b-3 border-blue-600 text-blue-600 bg-blue-50 flex items-center justify-center gap-1 sm:gap-2" data-tab="vocabulary"> <span class="text-base sm:text-xl">📝</span> <span class="text-xs sm:text-base">Từ vựng</span> </button> <button class="tab-btn flex-1 py-3 sm:py-5 px-2 sm:px-6 text-center font-medium transition-all duration-300 border-b-3 border-transparent text-gray-600 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center gap-1 sm:gap-2" data-tab="reading"> <span class="text-base sm:text-xl">📖</span> <span class="text-xs sm:text-base">Bài đọc</span> </button> <button class="tab-btn flex-1 py-3 sm:py-5 px-2 sm:px-6 text-center font-medium transition-all duration-300 border-b-3 border-transparent text-gray-600 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center gap-1 sm:gap-2" data-tab="grammar"> <span class="text-base sm:text-xl">📚</span> <span class="text-xs sm:text-base">Ngữ pháp</span> </button>
     </div><!-- Vocabulary Section -->
-    <div id="vocabulary-content" class="tab-content p-6">
+    <div id="vocabulary-content" class="tab-content p-3 sm:p-6">
      <div class="max-w-2xl mx-auto"><!-- Vocabulary Mode Toggle -->
-      <div class="flex justify-center mb-8">
-       <div class="bg-gray-100 rounded-lg p-1 flex"><button id="learn-mode-btn" class="px-6 py-3 rounded-lg font-medium transition-all duration-300 bg-blue-600 text-white shadow-md flex items-center gap-2"> <span class="text-lg">📚</span> Học từ </button> <button id="test-mode-btn" class="px-6 py-3 rounded-lg font-medium transition-all duration-300 text-gray-600 hover:text-blue-600 flex items-center gap-2"> <span class="text-lg">📝</span> Kiểm tra </button>
+      <div class="flex justify-center mb-4 sm:mb-8">
+       <div class="bg-gray-100 rounded-lg p-1 flex w-full sm:w-auto"><button id="learn-mode-btn" class="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 bg-blue-600 text-white shadow-md flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base"> <span class="text-sm sm:text-lg">📚</span> Học từ </button> <button id="test-mode-btn" class="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 text-gray-600 hover:text-blue-600 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base"> <span class="text-sm sm:text-lg">📝</span> Kiểm tra </button>
        </div>
       </div><!-- Learn Mode - Flashcards -->
       <div id="learn-mode" class="vocabulary-mode">
-       <div class="flashcard" id="flashcard">
+       <div class="flashcard" id="flashcard" style="height: 250px;">
         <div class="flashcard-inner">
          <div class="flashcard-front bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-          <div class="text-2xl sm:text-3xl font-bold mb-4" id="word-text">
+          <div class="text-lg sm:text-2xl font-bold mb-2 sm:mb-4" id="word-text">
            independent
           </div>
-          <div class="text-base sm:text-lg mb-2" id="word-type">
+          <div class="text-xs sm:text-base mb-1 sm:mb-2" id="word-type">
            (adj)
           </div>
-          <div class="text-sm" id="word-ipa">
+          <div class="text-xs sm:text-sm" id="word-ipa">
            /ˌɪndɪˈpendənt/
           </div>
-          <div class="mt-4 text-xs sm:text-sm opacity-80">
-           Nhấn SPACE để lật thẻ
+          <div class="mt-3 sm:mt-4 text-xs opacity-80">
+           Nhấn để lật thẻ
           </div>
          </div>
          <div class="flashcard-back bg-gradient-to-br from-green-500 to-green-600 text-white">
-          <div class="text-lg sm:text-xl font-semibold mb-4" id="word-meaning">
+          <div class="text-sm sm:text-lg font-semibold mb-2 sm:mb-4" id="word-meaning">
            độc lập, tự lập
           </div>
-          <div class="text-xs sm:text-sm italic" id="word-example">
+          <div class="text-xs italic px-2" id="word-example">
            "She wants to be independent from her parents."
           </div>
-          <div class="mt-4 text-xs sm:text-sm opacity-80">
-           Nhấn SPACE để lật lại
+          <div class="mt-3 sm:mt-4 text-xs opacity-80">
+           Nhấn để lật lại
           </div>
          </div>
         </div>
        </div>
-       <div class="flex justify-between items-center mt-6"><button id="prev-word" class="bg-gray-500 hover:bg-gray-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base"> ← Trước </button>
-        <div class="text-center">
-         <div class="text-base sm:text-lg font-semibold" id="word-counter">
+       <div class="flex justify-between items-center mt-4 sm:mt-6 gap-2"><button id="prev-word" class="bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm flex-shrink-0"> ← Trước </button>
+        <div class="text-center flex-1">
+         <div class="text-xs sm:text-base font-semibold" id="word-counter">
           1 / 44
-         </div><button id="flip-card" class="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg mt-2 transition-colors text-sm sm:text-base"> Lật thẻ (Space) </button>
-        </div><button id="next-word" class="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base"> Tiếp → </button>
+         </div><button id="flip-card" class="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg mt-1 sm:mt-2 transition-colors text-xs sm:text-sm"> Lật thẻ </button>
+        </div><button id="next-word" class="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm flex-shrink-0"> Tiếp → </button>
        </div>
       </div><!-- Test Mode - Quiz -->
       <div id="test-mode" class="vocabulary-mode hidden">
@@ -222,33 +236,33 @@
       </div>
      </div>
     </div><!-- Reading Section -->
-    <div id="reading-content" class="tab-content p-6 hidden">
+    <div id="reading-content" class="tab-content p-3 sm:p-6 hidden">
      <div class="max-w-4xl mx-auto">
-      <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6">Bài đọc: The Generation Gap</h3>
-      <div class="bg-gray-50 rounded-lg p-4 sm:p-6 mb-8 text-sm sm:text-base leading-relaxed">
-       <p>The <span class="highlight">generation gap</span> between parents and <span class="highlight">teenagers</span> has become a significant issue in modern families. Many young people desire to be <span class="highlight">independent</span> and make their own decisions, while parents often have <span class="highlight">strict</span> <span class="highlight">rules</span> and worry about their children's future. This can lead to frequent <span class="highlight">arguments</span> when teenagers <span class="highlight">complain</span> about their parents being too controlling.</p>
-       <p class="mt-4">Parents may <span class="highlight">nag</span> their children about doing <span class="highlight">laundry</span>, cleaning their rooms, or helping with household tasks like loading the <span class="highlight">dishwasher</span>. Meanwhile, teenagers often feel <span class="highlight">powerless</span> and want more <span class="highlight">pocket money</span> and freedom. Some parents have <span class="highlight">old-fashioned</span> ideas about <span class="highlight">technology</span>, while their children are <span class="highlight">technologically</span> advanced and follow the latest <span class="highlight">trends</span>.</p>
-       <p class="mt-4">However, <span class="highlight">easy-going</span> parents who are <span class="highlight">reliable</span> and understanding can build better <span class="highlight">relationships</span> with their children. Young people need to learn good <span class="highlight">manners</span> and become <span class="highlight">self-reliant</span> individuals. <span class="highlight">Therefore</span>, both generations should <span class="highlight">carry on</span> working together and <span class="highlight">carry out</span> their responsibilities. Parents can <span class="highlight">rely</span> on their teenagers to be more mature, while children should not feel <span class="highlight">worried</span> about expressing their need for <span class="highlight">independence</span>.</p>
+      <h3 class="text-base sm:text-xl font-bold text-gray-800 mb-3 sm:mb-6">Bài đọc: The Generation Gap</h3>
+      <div class="bg-gray-50 rounded-lg p-3 sm:p-6 mb-4 sm:mb-8 text-xs sm:text-sm leading-relaxed">
+       <p class="mb-3 sm:mb-4">The <span class="highlight">generation gap</span> between parents and <span class="highlight">teenagers</span> has become a significant issue in modern families. Many young people desire to be <span class="highlight">independent</span> and make their own decisions, while parents often have <span class="highlight">strict</span> <span class="highlight">rules</span> and worry about their children's future. This can lead to frequent <span class="highlight">arguments</span> when teenagers <span class="highlight">complain</span> about their parents being too controlling.</p>
+       <p class="mb-3 sm:mb-4">Parents may <span class="highlight">nag</span> their children about doing <span class="highlight">laundry</span>, cleaning their rooms, or helping with household tasks like loading the <span class="highlight">dishwasher</span>. Meanwhile, teenagers often feel <span class="highlight">powerless</span> and want more <span class="highlight">pocket money</span> and freedom. Some parents have <span class="highlight">old-fashioned</span> ideas about <span class="highlight">technology</span>, while their children are <span class="highlight">technologically</span> advanced and follow the latest <span class="highlight">trends</span>.</p>
+       <p>However, <span class="highlight">easy-going</span> parents who are <span class="highlight">reliable</span> and understanding can build better <span class="highlight">relationships</span> with their children. Young people need to learn good <span class="highlight">manners</span> and become <span class="highlight">self-reliant</span> individuals. <span class="highlight">Therefore</span>, both generations should <span class="highlight">carry on</span> working together and <span class="highlight">carry out</span> their responsibilities. Parents can <span class="highlight">rely</span> on their teenagers to be more mature, while children should not feel <span class="highlight">worried</span> about expressing their need for <span class="highlight">independence</span>.</p>
       </div>
-      <h4 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Câu hỏi trắc nghiệm</h4>
-      <div id="reading-quiz" class="space-y-4"><!-- Quiz questions will be generated here -->
+      <h4 class="text-sm sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Câu hỏi trắc nghiệm</h4>
+      <div id="reading-quiz" class="space-y-3 sm:space-y-4"><!-- Quiz questions will be generated here -->
       </div>
-      <div class="mt-6 text-center"><button id="check-reading" class="bg-purple-600 hover:bg-purple-700 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg transition-colors text-sm sm:text-base"> Kiểm tra đáp án </button>
-       <div id="reading-result" class="mt-4 text-base sm:text-lg font-semibold"></div>
+      <div class="mt-4 sm:mt-6 text-center"><button id="check-reading" class="bg-purple-600 hover:bg-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-xs sm:text-sm"> Kiểm tra đáp án </button>
+       <div id="reading-result" class="mt-3 sm:mt-4 text-xs sm:text-base font-semibold"></div>
       </div>
      </div>
     </div><!-- Grammar Section -->
-    <div id="grammar-content" class="tab-content p-6 hidden">
+    <div id="grammar-content" class="tab-content p-3 sm:p-6 hidden">
      <div class="max-w-4xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-       <div class="space-y-2"><button class="grammar-topic w-full text-left p-3 sm:p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-sm sm:text-base" data-topic="present-simple"> Present Simple </button> <button class="grammar-topic w-full text-left p-3 sm:p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-sm sm:text-base" data-topic="present-continuous"> Present Continuous </button> <button class="grammar-topic w-full text-left p-3 sm:p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-sm sm:text-base" data-topic="stative-verbs"> Stative Verbs </button> <button class="grammar-topic w-full text-left p-3 sm:p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-sm sm:text-base" data-topic="linking-verbs"> Linking Verbs </button>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-8">
+       <div class="space-y-2"><button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="present-simple"> Present Simple </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="present-continuous"> Present Continuous </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="stative-verbs"> Stative Verbs </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="linking-verbs"> Linking Verbs </button>
        </div>
-       <div class="space-y-2"><button class="grammar-topic w-full text-left p-3 sm:p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-sm sm:text-base" data-topic="compound-sentences"> Compound Sentences </button> <button class="grammar-topic w-full text-left p-3 sm:p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-sm sm:text-base" data-topic="negative-inversion"> Đảo ngữ phủ định </button> <button class="grammar-topic w-full text-left p-3 sm:p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-sm sm:text-base" data-topic="no-inversion"> Đảo ngữ cụm từ "No" </button> <button class="grammar-topic w-full text-left p-3 sm:p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-sm sm:text-base" data-topic="comprehensive-test"> Bài tập tổng hợp (30 câu) </button>
+       <div class="space-y-2"><button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="compound-sentences"> Compound Sentences </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="negative-inversion"> Đảo ngữ phủ định </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="no-inversion"> Đảo ngữ cụm từ "No" </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-xs sm:text-sm" data-topic="comprehensive-test"> <span class="hidden sm:inline">Bài tập tổng hợp (30 câu)</span> <span class="sm:hidden">Tổng hợp (30 câu)</span> </button>
        </div>
       </div><!-- Grammar Theory Content -->
-      <div id="grammar-theory" class="bg-gray-50 rounded-lg p-6">
+      <div id="grammar-theory" class="bg-gray-50 rounded-lg p-3 sm:p-6">
        <div id="present-simple" class="grammar-content">
-        <h3 class="text-lg sm:text-xl font-bold mb-4">Present Simple</h3>
+        <h3 class="text-base sm:text-lg font-bold mb-4">Present Simple</h3>
         <p class="mb-4">Thì hiện tại đơn diễn tả hành động thường xuyên, sự thật hiển nhiên, hoặc thói quen.</p>
         <div class="bg-white p-4 rounded-lg">
          <h4 class="font-semibold mb-2">Cấu trúc:</h4>
@@ -1158,8 +1172,19 @@
             const unitTitle = config.unit_title || defaultConfig.unit_title;
             const homeUrl = config.home_url || defaultConfig.home_url;
             
-            document.getElementById('unit-title').textContent = unitTitle;
-            document.querySelector('a[href]').href = homeUrl;
+            // Update both desktop and mobile titles
+            const desktopTitle = document.getElementById('unit-title');
+            const mobileTitle = document.getElementById('unit-title-mobile');
+            
+            if (desktopTitle) desktopTitle.textContent = unitTitle;
+            if (mobileTitle) mobileTitle.textContent = unitTitle;
+            
+            // Update all home links
+            document.querySelectorAll('a[href]').forEach(link => {
+                if (link.href.includes('nckhthptnk.github.io') || link.href === homeUrl) {
+                    link.href = homeUrl;
+                }
+            });
         }
 
         function mapToCapabilities(config) {
@@ -1641,5 +1666,5 @@
         // Initialize app when page loads
         document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9969c84a103ff938',t:'MTc2MTgxNTQ1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9969d3e9f311fdb6',t:'MTc2MTgxNTkzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
