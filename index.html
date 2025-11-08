@@ -352,7 +352,7 @@
      </div>
     </div>
    </header><!-- Tab Navigation -->
-   <div class="flex justify-center gap-2 md:gap-4 px-4 md:px-6 mb-6 md:mb-8 flex-wrap"><button id="vocab-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base active"> <span id="vocabulary-tab-text">📚 Từ vựng</span> </button> <button id="reading-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="reading-tab-text">📖 Bài đọc</span> </button> <button id="stereotypes-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="stereotypes-tab-text">🎭 Định kiến</span> </button> <button id="grammar-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="grammar-tab-text">✏️ Ngữ pháp</span> </button>
+   <div class="flex justify-center gap-2 md:gap-4 px-4 md:px-6 mb-6 md:mb-8 flex-wrap"><button id="vocab-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base active"> <span id="vocabulary-tab-text">📚 Từ vựng</span> </button> <button id="reading-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="reading-tab-text">📖 Bài đọc</span> </button> <button id="grammar-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="grammar-tab-text">✏️ Ngữ pháp</span> </button> <button id="stereotypes-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="stereotypes-tab-text">🎭 Định kiến</span> </button>
    </div><!-- Main Content -->
    <main class="flex-1 px-4 md:px-6 pb-8"><!-- Vocabulary Section -->
     <div id="vocab-section" class="max-w-4xl mx-auto"><!-- Sub-tabs for Vocabulary -->
@@ -384,6 +384,9 @@
       <div class="flex justify-between mt-6 md:mt-8 max-w-md mx-auto gap-4"><button id="prev-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> ← Lùi </button> <button id="next-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> Tiếp → </button>
       </div>
       <p class="text-center mt-4 text-sm text-gray-600">Nhấn phím ← → để điều hướng, Space để lật thẻ</p>
+      <div class="mt-6 p-4 rounded-lg text-center" style="background-color: #fef3c7; border: 2px solid #fbbf24;">
+       <p class="text-lg font-semibold" style="color: #92400e;">💡 Hãy hoàn thành kiểm tra để hoàn thành tiến độ bạn nhé!</p>
+      </div>
      </div><!-- Vocabulary Test Content -->
      <div id="test-content" class="hidden">
       <div class="mb-6">
@@ -623,6 +626,7 @@
     let readingAnswers = {};
     let grammarAnswers = {};
     let vocabularyTestAnswers = {};
+    let viewedCards = new Set(); // Track which cards have been flipped
 
     // Sound effects using Web Audio API
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -1512,6 +1516,41 @@
       onDataChanged(data) {
         if (data.length > 0) {
           userProgress = data[0];
+          
+          // Restore user answers from saved progress
+          if (userProgress.vocab_test_answers) {
+            try {
+              vocabularyTestAnswers = JSON.parse(userProgress.vocab_test_answers);
+            } catch (e) {
+              vocabularyTestAnswers = {};
+            }
+          }
+          
+          if (userProgress.reading_answers) {
+            try {
+              readingAnswers = JSON.parse(userProgress.reading_answers);
+            } catch (e) {
+              readingAnswers = {};
+            }
+          }
+          
+          if (userProgress.grammar_answers) {
+            try {
+              grammarAnswers = JSON.parse(userProgress.grammar_answers);
+            } catch (e) {
+              grammarAnswers = {};
+            }
+          }
+          
+          if (userProgress.viewed_cards) {
+            try {
+              const viewedArray = JSON.parse(userProgress.viewed_cards);
+              viewedCards = new Set(viewedArray);
+            } catch (e) {
+              viewedCards = new Set();
+            }
+          }
+          
           updateAllProgress();
         }
       }
@@ -1526,37 +1565,85 @@
       }
     }
 
-    async function saveProgress() {
-      if (!window.dataSdk) return;
+    function calculateProgress() {
+      // Calculate vocabulary progress based on viewed cards
+      const vocabProgress = Math.round((viewedCards.size / vocabularyCards.length) * 100);
       
-      const vocabProgress = Math.round(((currentCardIndex + 1) / vocabularyCards.length) * 100);
-      const readingProgress = Object.keys(readingAnswers).length > 0 ? 
-        Math.round((Object.keys(readingAnswers).length / readingQuestions.length) * 100) : 0;
-      const grammarProgress = Object.keys(grammarAnswers).length > 0 ?
-        Math.round((Object.keys(grammarAnswers).length / grammarQuestions.length) * 100) : 0;
-      const totalProgress = Math.round((vocabProgress + readingProgress + grammarProgress) / 3);
+      // Calculate reading progress based on answered questions
+      const readingAnsweredCount = Object.keys(readingAnswers).length;
+      const readingProgress = readingAnsweredCount > 0 ? 
+        Math.round((readingAnsweredCount / readingQuestions.length) * 100) : 0;
+      
+      // Calculate grammar progress based on answered questions
+      const grammarAnsweredCount = Object.keys(grammarAnswers).length;
+      const grammarProgress = grammarAnsweredCount > 0 ?
+        Math.round((grammarAnsweredCount / grammarQuestions.length) * 100) : 0;
+      
+      // Calculate vocabulary test progress
+      const vocabTestAnsweredCount = Object.keys(vocabularyTestAnswers).length;
+      const vocabTestProgress = vocabTestAnsweredCount > 0 ?
+        Math.round((vocabTestAnsweredCount / vocabularyTestQuestions.length) * 100) : 0;
+      
+      // Average vocabulary progress includes both flashcards and test
+      const avgVocabProgress = Math.round((vocabProgress + vocabTestProgress) / 2);
+      
+      // Total progress is average of all three sections
+      const totalProgress = Math.round((avgVocabProgress + readingProgress + grammarProgress) / 3);
 
-      const progressData = {
-        id: "user_progress",
-        vocabulary_progress: vocabProgress,
+      return {
+        vocabulary_progress: avgVocabProgress,
         reading_progress: readingProgress,
         grammar_progress: grammarProgress,
         total_progress: totalProgress,
-        completed_vocab_cards: currentCardIndex + 1,
-        reading_score: 0,
-        grammar_score: 0,
+        completed_vocab_cards: viewedCards.size,
+        reading_score: readingAnsweredCount,
+        grammar_score: grammarAnsweredCount
+      };
+    }
+
+    function updateProgressUI() {
+      const progress = calculateProgress();
+      
+      updateProgressCircle('total-progress', progress.total_progress);
+      updateProgressCircle('vocab-progress', progress.vocabulary_progress);
+      updateProgressCircle('reading-progress', progress.reading_progress);
+      updateProgressCircle('grammar-progress', progress.grammar_progress);
+    }
+
+    async function saveProgress() {
+      // Update UI immediately FIRST
+      updateProgressUI();
+
+      // Then save to database
+      if (!window.dataSdk) return;
+
+      const progress = calculateProgress();
+
+      const progressData = {
+        id: "user_progress",
+        vocabulary_progress: progress.vocabulary_progress,
+        reading_progress: progress.reading_progress,
+        grammar_progress: progress.grammar_progress,
+        total_progress: progress.total_progress,
+        completed_vocab_cards: progress.completed_vocab_cards,
+        reading_score: progress.reading_score,
+        grammar_score: progress.grammar_score,
+        vocab_test_answers: JSON.stringify(vocabularyTestAnswers),
+        reading_answers: JSON.stringify(readingAnswers),
+        grammar_answers: JSON.stringify(grammarAnswers),
+        viewed_cards: JSON.stringify(Array.from(viewedCards)),
         last_updated: new Date().toISOString()
       };
 
-      if (userProgress) {
+      if (userProgress && userProgress.__backendId) {
         const result = await window.dataSdk.update({ ...progressData, __backendId: userProgress.__backendId });
-        if (!result.isOk) {
-          showToast("Không thể lưu tiến độ");
+        if (result.isOk) {
+          userProgress = { ...progressData, __backendId: userProgress.__backendId };
         }
       } else {
         const result = await window.dataSdk.create(progressData);
-        if (!result.isOk) {
-          showToast("Không thể lưu tiến độ");
+        if (result.isOk) {
+          // After first create, we need to wait for onDataChanged to get the __backendId
         }
       }
     }
@@ -1704,12 +1791,32 @@
     function speakWord(word) {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.8;
-        utterance.pitch = 1;
-        window.speechSynthesis.speak(utterance);
+        
+        // Wait a bit for mobile devices
+        setTimeout(() => {
+          const utterance = new SpeechSynthesisUtterance(word);
+          utterance.lang = 'en-US';
+          utterance.rate = 0.7; // Slower for better clarity on mobile
+          utterance.pitch = 1;
+          utterance.volume = 1;
+          
+          // For mobile devices, ensure voices are loaded
+          const voices = window.speechSynthesis.getVoices();
+          const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+          if (englishVoice) {
+            utterance.voice = englishVoice;
+          }
+          
+          window.speechSynthesis.speak(utterance);
+        }, 100);
       }
+    }
+    
+    // Load voices for mobile devices
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
     }
 
     // Flashcard functionality
@@ -1794,14 +1901,20 @@
       document.getElementById('test-next-btn').disabled = currentTestIndex === vocabularyTestQuestions.length - 1;
     }
 
-    function selectTestAnswer(answerIndex) {
+    async function selectTestAnswer(answerIndex) {
       vocabularyTestAnswers[currentTestIndex] = answerIndex;
       updateVocabularyTest();
-      saveProgress();
+      await saveProgress();
     }
 
-    document.getElementById('flashcard-container').addEventListener('click', function() {
+    document.getElementById('flashcard-container').addEventListener('click', async function() {
       this.classList.toggle('flipped');
+      
+      // Mark card as viewed when flipped
+      if (this.classList.contains('flipped')) {
+        viewedCards.add(currentCardIndex);
+        await saveProgress();
+      }
     });
 
     document.getElementById('prev-btn').addEventListener('click', function() {
@@ -1811,11 +1924,10 @@
       }
     });
 
-    document.getElementById('next-btn').addEventListener('click', async function() {
+    document.getElementById('next-btn').addEventListener('click', function() {
       if (currentCardIndex < vocabularyCards.length - 1) {
         currentCardIndex++;
         updateFlashcard();
-        await saveProgress();
       }
     });
 
@@ -1859,7 +1971,7 @@
     });
 
     // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', async function(e) {
       const activeSection = document.querySelector('#vocab-section:not(.hidden)');
       if (!activeSection) return;
 
@@ -1869,10 +1981,16 @@
       } else if (e.key === 'ArrowRight' && currentCardIndex < vocabularyCards.length - 1) {
         currentCardIndex++;
         updateFlashcard();
-        saveProgress();
       } else if (e.key === ' ') {
         e.preventDefault();
-        document.getElementById('flashcard-container').classList.toggle('flipped');
+        const flashcard = document.getElementById('flashcard-container');
+        flashcard.classList.toggle('flipped');
+        
+        // Mark card as viewed when flipped with spacebar
+        if (flashcard.classList.contains('flipped')) {
+          viewedCards.add(currentCardIndex);
+          await saveProgress();
+        }
       }
     });
 
@@ -1933,13 +2051,14 @@
       });
 
       document.querySelectorAll('.quiz-option').forEach(opt => {
-        opt.addEventListener('click', function() {
+        opt.addEventListener('click', async function() {
           const question = this.dataset.question;
           document.querySelectorAll(`[data-question="${question}"]`).forEach(o => {
             o.classList.remove('selected', 'ring-2', 'ring-blue-500');
           });
           this.classList.add('selected', 'ring-2', 'ring-blue-500');
           readingAnswers[question] = parseInt(this.dataset.option);
+          await saveProgress();
         });
       });
     }
@@ -2033,10 +2152,10 @@
       document.getElementById('grammar-next-btn').disabled = currentGrammarIndex === grammarQuestions.length - 1;
     }
 
-    function selectGrammarAnswer(answerIndex) {
+    async function selectGrammarAnswer(answerIndex) {
       grammarAnswers[currentGrammarIndex] = answerIndex;
       updateGrammarQuestion();
-      saveProgress();
+      await saveProgress();
     }
 
     // Grammar navigation
@@ -2091,5 +2210,5 @@
       onConfigChange(window.elementSdk.config);
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b5ed43d489fdc4',t:'MTc2MjYxMzg5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b60ab691d56008',t:'MTc2MjYxNTA5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
