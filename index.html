@@ -15,6 +15,8 @@
       height: 100%;
       overflow-x: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+      color: #1e293b;
     }
     
     html {
@@ -55,6 +57,14 @@
       align-items: center;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       text-align: center;
+    }
+    
+    .flashcard-front {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    }
+    
+    .flashcard-back {
+      background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
     }
     
     .flashcard-back {
@@ -143,6 +153,7 @@
     
     .progress-bar {
       transition: width 0.5s ease;
+      background-color: #3b82f6;
     }
     
     @keyframes fadeIn {
@@ -167,6 +178,19 @@
     .tab-button {
       transition: all 0.3s;
       position: relative;
+      background-color: #ffffff;
+      color: #1e293b;
+      border: 2px solid #e2e8f0;
+    }
+    
+    .tab-button:hover {
+      background-color: #f1f5f9;
+    }
+    
+    .tab-button.active {
+      background-color: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
     }
     
     .tab-button.active::after {
@@ -176,15 +200,19 @@
       left: 0;
       right: 0;
       height: 3px;
+      background-color: #3b82f6;
       border-radius: 3px 3px 0 0;
     }
     
     .control-button {
       transition: all 0.2s;
+      background-color: #3b82f6;
+      color: white;
     }
     
     .control-button:hover:not(:disabled) {
       transform: scale(1.05);
+      background-color: #2563eb;
     }
     
     .control-button:active:not(:disabled) {
@@ -233,6 +261,7 @@
     
     .progress-ring-circle {
       transition: stroke-dashoffset 0.5s ease;
+      stroke: #3b82f6;
     }
     
     @media (max-width: 768px) {
@@ -283,7 +312,7 @@
      <div class="mt-4 md:mt-6">
       <h2 class="text-lg md:text-xl lg:text-2xl font-bold mb-3 md:mb-4">Tiến độ học tập</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 lg:gap-6"><!-- Total Progress -->
-       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg" style="background-color: #ffffff;">
         <div class="progress-circle mx-auto mb-2">
          <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="10" fill="transparent" r="52" cx="60" cy="60" /> <circle id="total-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="10" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
          </svg>
@@ -292,7 +321,7 @@
         </div>
         <p id="total-progress-label" class="font-semibold text-xs md:text-sm lg:text-base">Tổng tiến độ</p>
        </div><!-- Vocabulary Progress -->
-       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg" style="background-color: #ffffff;">
         <div class="progress-circle mx-auto mb-2">
          <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" /> <circle id="vocab-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
          </svg>
@@ -301,7 +330,7 @@
         </div>
         <p id="vocab-progress-label" class="font-semibold text-xs md:text-sm lg:text-base">Từ vựng</p>
        </div><!-- Reading Progress -->
-       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg" style="background-color: #ffffff;">
         <div class="progress-circle mx-auto mb-2">
          <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" /> <circle id="reading-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
          </svg>
@@ -310,7 +339,7 @@
         </div>
         <p id="reading-progress-label" class="font-semibold text-xs md:text-sm lg:text-base">Bài đọc</p>
        </div><!-- Grammar Progress -->
-       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg" style="background-color: #ffffff;">
         <div class="progress-circle mx-auto mb-2">
          <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" /> <circle id="grammar-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
          </svg>
@@ -333,7 +362,7 @@
       <div class="mb-6">
        <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium">Tiến độ</span> <span id="card-counter" class="text-sm font-medium">1 / 15</span>
        </div>
-       <div class="w-full h-3 rounded-full overflow-hidden">
+       <div class="w-full h-3 rounded-full overflow-hidden" style="background-color: #e5e7eb;">
         <div id="vocab-progress-bar" class="progress-bar h-full" style="width: 6.67%"></div>
        </div>
       </div>
@@ -360,16 +389,16 @@
       <div class="mb-6">
        <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium">Câu hỏi</span> <span id="test-counter" class="text-sm font-medium">1 / 46</span>
        </div>
-       <div class="w-full h-3 rounded-full overflow-hidden">
+       <div class="w-full h-3 rounded-full overflow-hidden" style="background-color: #e5e7eb;">
         <div id="test-progress-bar" class="progress-bar h-full" style="width: 2.17%"></div>
        </div>
       </div>
-      <div class="rounded-xl p-6 md:p-8 shadow-lg mb-6">
+      <div class="rounded-xl p-6 md:p-8 shadow-lg mb-6" style="background-color: #ffffff;">
        <h3 id="test-question" class="text-xl md:text-2xl font-bold mb-6">Choose the correct answer:</h3>
        <div id="test-options" class="space-y-3"><!-- Options will be inserted here -->
        </div>
       </div>
-      <div id="test-feedback" class="rounded-xl p-4 md:p-6 shadow-lg mb-6 hidden">
+      <div id="test-feedback" class="rounded-xl p-4 md:p-6 shadow-lg mb-6 hidden" style="background-color: #ffffff;">
        <div class="flex items-start gap-3"><span id="feedback-icon" class="text-3xl"></span>
         <div class="flex-1">
          <p id="feedback-text" class="font-bold text-lg mb-2"></p>
@@ -544,7 +573,7 @@
         <div class="mb-6">
          <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium">Câu hỏi</span> <span id="grammar-counter" class="text-sm font-medium">1 / 30</span>
          </div>
-         <div class="w-full h-3 rounded-full overflow-hidden">
+         <div class="w-full h-3 rounded-full overflow-hidden" style="background-color: #e5e7eb;">
           <div id="grammar-progress-bar" class="progress-bar h-full" style="width: 3.33%"></div>
          </div>
         </div>
@@ -1561,6 +1590,7 @@
 
       document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${surfaceColor} 100%)`;
       document.body.style.color = textColor;
+      document.body.style.minHeight = '100%';
 
       document.querySelector('header').style.color = textColor;
       
@@ -2061,5 +2091,5 @@
       onConfigChange(window.elementSdk.config);
     }
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b5df2b136b3d7d',t:'MTc2MjYxMzMxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b5ed43d489fdc4',t:'MTc2MjYxMzg5Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
