@@ -3,1668 +3,2063 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unit 1: Generation Gap and Independent Life</title>
-  <script src="/_sdk/element_sdk.js"></script>
+  <title>Unit 1: Generation Gap and Independence Life</title>
   <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-        body {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .flashcard {
-            perspective: 1000px;
-            height: 300px;
-        }
-        
-        @media (max-width: 640px) {
-            .flashcard {
-                height: 250px;
-            }
-        }
-        
-        .flashcard-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        
-        .flashcard.flipped .flashcard-inner {
-            transform: rotateY(180deg);
-        }
-        
-        .flashcard-front, .flashcard-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .flashcard-back {
-            transform: rotateY(180deg);
-        }
-        
-        .progress-bar {
-            transition: width 0.3s ease;
-        }
-        
-        .highlight {
-            background-color: #fef08a;
-            padding: 2px 4px;
-            border-radius: 3px;
-        }
-        
-        .grammar-content {
-            display: none;
-        }
-        
-        .grammar-content.active {
-            display: block;
-        }
-        
-        .quiz-option {
-            transition: all 0.2s ease;
-        }
-        
-        .quiz-option:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .quiz-option.correct {
-            background-color: #dcfce7;
-            border-color: #16a34a;
-        }
-        
-        .quiz-option.incorrect {
-            background-color: #fef2f2;
-            border-color: #dc2626;
-        }
-        
-        .border-b-3 {
-            border-bottom-width: 3px;
-        }
-    </style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    html {
+      height: 100%;
+    }
+    
+    .flashcard {
+      perspective: 1000px;
+      cursor: pointer;
+      height: 450px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    
+    .flashcard.flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 16px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+    
+    .flashcard-back {
+      transform: rotateY(180deg);
+    }
+    
+    .flashcard-front h2 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .flashcard-front p {
+      color: white;
+      font-size: 1.1rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    
+    .flashcard-back h3 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+    
+    .flashcard-back .phonetic {
+      font-size: 1.5rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 1rem;
+    }
+    
+    .flashcard-back .word-type {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+    
+    .flashcard-back .definition {
+      font-size: 1.3rem;
+      color: white;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .flashcard-back .example {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.9);
+      font-style: italic;
+      line-height: 1.5;
+    }
+    
+    .highlight {
+      background-color: #fef08a;
+      padding: 2px 4px;
+      border-radius: 2px;
+      font-weight: 600;
+      color: #000;
+    }
+    
+    .quiz-option {
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .quiz-option:hover:not(.correct):not(.incorrect) {
+      transform: translateX(4px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .quiz-option.selected {
+      border-width: 3px;
+    }
+    
+    .quiz-option.correct {
+      background-color: #86efac !important;
+      border-color: #22c55e !important;
+    }
+    
+    .quiz-option.incorrect {
+      background-color: #fca5a5 !important;
+      border-color: #ef4444 !important;
+    }
+    
+    .progress-bar {
+      transition: width 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .grammar-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    
+    .grammar-content.active {
+      max-height: 3000px;
+    }
+    
+    .tab-button {
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .tab-button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 3px 3px 0 0;
+    }
+    
+    .control-button {
+      transition: all 0.2s;
+    }
+    
+    .control-button:hover:not(:disabled) {
+      transform: scale(1.05);
+    }
+    
+    .control-button:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+    
+    .control-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .reading-passage {
+      line-height: 1.8;
+      font-size: 1.1rem;
+    }
+    
+    .progress-circle {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      display: inline-block;
+    }
+    
+    @media (min-width: 768px) {
+      .progress-circle {
+        width: 110px;
+        height: 110px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .progress-circle {
+        width: 140px;
+        height: 140px;
+      }
+    }
+    
+    .progress-circle svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+    
+    .progress-ring-circle {
+      transition: stroke-dashoffset 0.5s ease;
+    }
+    
+    @media (max-width: 768px) {
+      .flashcard {
+        height: 400px;
+      }
+      
+      .flashcard-front h2 {
+        font-size: 2.5rem;
+      }
+      
+      .flashcard-back h3 {
+        font-size: 2rem;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .flashcard {
+        height: 350px;
+      }
+      
+      .flashcard-front h2 {
+        font-size: 2rem;
+      }
+      
+      .flashcard-back h3 {
+        font-size: 1.5rem;
+      }
+      
+      .flashcard-back .phonetic {
+        font-size: 1.2rem;
+      }
+      
+      .flashcard-back .definition {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
   <style>@view-transition { navigation: auto; }</style>
  </head>
- <body class="min-h-full bg-gradient-to-br from-blue-50 to-indigo-100">
-  <div class="container mx-auto px-2 sm:px-4 py-3 sm:py-6 max-w-6xl"><!-- Header -->
-   <header class="text-center mb-4 sm:mb-8"><!-- Mobile Layout -->
-    <div class="block sm:hidden">
-     <div class="flex justify-center mb-3"><a href="https://nckhthptnk.github.io/tienganh11/" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 text-sm"> <span class="text-base">🏠</span> <span class="font-medium">Trang chủ</span> </a>
-     </div>
-     <div class="px-2">
-      <h1 id="unit-title-mobile" class="text-base font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 leading-tight">Unit 1: Generation Gap and Independent Life</h1>
-      <p class="text-xs text-gray-600 font-medium px-2 leading-relaxed"><span class="text-lg">✨</span> Chào mừng bạn đến với bài học Tiếng Anh cùng Mega Master 11 nhé! <span class="text-lg">📚</span></p>
-     </div>
-    </div><!-- Desktop Layout -->
-    <div class="hidden sm:flex justify-between items-center mb-4"><a href="https://nckhthptnk.github.io/tienganh11/" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center gap-2"> <span class="text-lg">🏠</span> <span class="font-medium">Trang chủ</span> </a>
-     <div class="text-center">
-      <h1 id="unit-title" class="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">Unit 1: Generation Gap and Independent Life</h1>
-      <p class="text-xs sm:text-sm text-gray-600 font-medium flex items-center justify-center gap-2"><span class="text-2xl">✨</span> Chào mừng bạn đến với bài học Tiếng Anh cùng Mega Master 11 nhé! <span class="text-2xl">📚</span></p>
-     </div>
-     <div class="w-32"></div>
-    </div>
-   </header><!-- Progress Section -->
-   <div class="bg-gradient-to-r from-white to-blue-50 rounded-2xl shadow-xl p-3 sm:p-6 mb-4 sm:mb-8 border border-blue-100">
-    <h2 class="text-sm sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-6 flex items-center gap-2"><span class="text-base sm:text-xl">📊</span> Tiến độ học tập của bạn</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6">
-     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
-       🎯
-      </div>
-      <div class="text-sm sm:text-xl font-bold text-blue-600" id="total-progress">
-       0%
-      </div>
-      <div class="text-xs text-gray-600 font-medium">
-       Tổng tiến độ
-      </div>
-      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="total-bar" style="width: 0%"></div>
-      </div>
-     </div>
-     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
-       📝
-      </div>
-      <div class="text-sm sm:text-xl font-bold text-green-600" id="vocab-progress">
-       0%
-      </div>
-      <div class="text-xs text-gray-600 font-medium">
-       Từ vựng
-      </div>
-      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-green-500 to-green-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="vocab-bar" style="width: 0%"></div>
-      </div>
-     </div>
-     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
-       📖
-      </div>
-      <div class="text-sm sm:text-xl font-bold text-purple-600" id="reading-progress">
-       0%
-      </div>
-      <div class="text-xs text-gray-600 font-medium">
-       Bài đọc
-      </div>
-      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-purple-500 to-purple-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="reading-bar" style="width: 0%"></div>
-      </div>
-     </div>
-     <div class="text-center bg-white rounded-xl p-2 sm:p-4 shadow-md hover:shadow-lg transition-shadow">
-      <div class="text-lg sm:text-3xl mb-1 sm:mb-2">
-       📚
-      </div>
-      <div class="text-sm sm:text-xl font-bold text-orange-600" id="grammar-progress">
-       0%
-      </div>
-      <div class="text-xs text-gray-600 font-medium">
-       Ngữ pháp
-      </div>
-      <div class="w-full bg-gray-200 rounded-full h-2 sm:h-3 mt-2 sm:mt-3 overflow-hidden">
-       <div class="bg-gradient-to-r from-orange-500 to-orange-600 h-2 sm:h-3 rounded-full progress-bar transition-all duration-500" id="grammar-bar" style="width: 0%"></div>
+ <body>
+  <div id="app" class="min-h-full flex flex-col"><!-- Header -->
+   <header class="py-4 px-4 md:py-6 md:px-6">
+    <div class="max-w-7xl mx-auto">
+     <div class="mb-4"><a href="https://nckhthptnk.github.io/tienganh11/" target="_blank" rel="noopener noreferrer" id="home-btn" class="control-button inline-flex items-center gap-2 px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold text-white text-sm md:text-base mb-3 md:mb-4"> <span id="home-button-text">🏠 Trang chủ</span> </a>
+      <h1 id="unit-title" class="text-xl md:text-3xl lg:text-4xl font-bold leading-tight">Unit 1: Generation Gap and Independence Life</h1>
+     </div><!-- Progress Dashboard -->
+     <div class="mt-4 md:mt-6">
+      <h2 class="text-lg md:text-xl lg:text-2xl font-bold mb-3 md:mb-4">Tiến độ học tập</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 lg:gap-6"><!-- Total Progress -->
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+        <div class="progress-circle mx-auto mb-2">
+         <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="10" fill="transparent" r="52" cx="60" cy="60" /> <circle id="total-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="10" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+         </svg>
+         <div class="absolute inset-0 flex items-center justify-center"><span id="total-progress-text" class="text-lg md:text-2xl lg:text-3xl font-bold">0%</span>
+         </div>
+        </div>
+        <p id="total-progress-label" class="font-semibold text-xs md:text-sm lg:text-base">Tổng tiến độ</p>
+       </div><!-- Vocabulary Progress -->
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+        <div class="progress-circle mx-auto mb-2">
+         <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" /> <circle id="vocab-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+         </svg>
+         <div class="absolute inset-0 flex items-center justify-center"><span id="vocab-progress-text" class="text-lg md:text-2xl lg:text-3xl font-bold">0%</span>
+         </div>
+        </div>
+        <p id="vocab-progress-label" class="font-semibold text-xs md:text-sm lg:text-base">Từ vựng</p>
+       </div><!-- Reading Progress -->
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+        <div class="progress-circle mx-auto mb-2">
+         <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" /> <circle id="reading-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+         </svg>
+         <div class="absolute inset-0 flex items-center justify-center"><span id="reading-progress-text" class="text-lg md:text-2xl lg:text-3xl font-bold">0%</span>
+         </div>
+        </div>
+        <p id="reading-progress-label" class="font-semibold text-xs md:text-sm lg:text-base">Bài đọc</p>
+       </div><!-- Grammar Progress -->
+       <div class="rounded-xl p-3 md:p-4 lg:p-6 text-center shadow-lg">
+        <div class="progress-circle mx-auto mb-2">
+         <svg class="progress-ring" viewbox="0 0 120 120" width="100%" height="100%"><circle class="text-gray-200" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" /> <circle id="grammar-progress-ring" class="progress-ring-circle" stroke="currentColor" stroke-width="9" fill="transparent" r="52" cx="60" cy="60" stroke-dasharray="326.73" stroke-dashoffset="326.73" />
+         </svg>
+         <div class="absolute inset-0 flex items-center justify-center"><span id="grammar-progress-text" class="text-lg md:text-2xl lg:text-3xl font-bold">0%</span>
+         </div>
+        </div>
+        <p id="grammar-progress-label" class="font-semibold text-xs md:text-sm lg:text-base">Ngữ pháp</p>
+       </div>
       </div>
      </div>
     </div>
-   </div><!-- Content Selection Tabs -->
-   <div class="bg-white rounded-2xl shadow-xl mb-4 sm:mb-8 overflow-hidden">
-    <div class="flex border-b border-gray-100"><button class="tab-btn flex-1 py-3 sm:py-5 px-2 sm:px-6 text-center font-medium transition-all duration-300 border-b-3 border-blue-600 text-blue-600 bg-blue-50 flex items-center justify-center gap-1 sm:gap-2" data-tab="vocabulary"> <span class="text-base sm:text-xl">📝</span> <span class="text-xs sm:text-base">Từ vựng</span> </button> <button class="tab-btn flex-1 py-3 sm:py-5 px-2 sm:px-6 text-center font-medium transition-all duration-300 border-b-3 border-transparent text-gray-600 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center gap-1 sm:gap-2" data-tab="reading"> <span class="text-base sm:text-xl">📖</span> <span class="text-xs sm:text-base">Bài đọc</span> </button> <button class="tab-btn flex-1 py-3 sm:py-5 px-2 sm:px-6 text-center font-medium transition-all duration-300 border-b-3 border-transparent text-gray-600 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center gap-1 sm:gap-2" data-tab="grammar"> <span class="text-base sm:text-xl">📚</span> <span class="text-xs sm:text-base">Ngữ pháp</span> </button>
-    </div><!-- Vocabulary Section -->
-    <div id="vocabulary-content" class="tab-content p-3 sm:p-6">
-     <div class="max-w-2xl mx-auto"><!-- Vocabulary Mode Toggle -->
-      <div class="flex justify-center mb-4 sm:mb-8">
-       <div class="bg-gray-100 rounded-lg p-1 flex w-full sm:w-auto"><button id="learn-mode-btn" class="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 bg-blue-600 text-white shadow-md flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base"> <span class="text-sm sm:text-lg">📚</span> Học từ </button> <button id="test-mode-btn" class="flex-1 sm:flex-none px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 text-gray-600 hover:text-blue-600 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base"> <span class="text-sm sm:text-lg">📝</span> Kiểm tra </button>
+   </header><!-- Tab Navigation -->
+   <div class="flex justify-center gap-2 md:gap-4 px-4 md:px-6 mb-6 md:mb-8 flex-wrap"><button id="vocab-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base active"> <span id="vocabulary-tab-text">📚 Từ vựng</span> </button> <button id="reading-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="reading-tab-text">📖 Bài đọc</span> </button> <button id="stereotypes-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="stereotypes-tab-text">🎭 Định kiến</span> </button> <button id="grammar-tab" class="tab-button px-4 md:px-8 py-2 md:py-3 rounded-lg font-semibold text-sm md:text-base"> <span id="grammar-tab-text">✏️ Ngữ pháp</span> </button>
+   </div><!-- Main Content -->
+   <main class="flex-1 px-4 md:px-6 pb-8"><!-- Vocabulary Section -->
+    <div id="vocab-section" class="max-w-4xl mx-auto"><!-- Sub-tabs for Vocabulary -->
+     <div class="flex justify-center gap-2 md:gap-4 mb-6"><button id="flashcard-subtab" class="tab-button px-4 md:px-6 py-2 rounded-lg font-semibold text-sm md:text-base active"> 📇 Flashcard </button> <button id="test-subtab" class="tab-button px-4 md:px-6 py-2 rounded-lg font-semibold text-sm md:text-base"> ✅ Kiểm tra </button>
+     </div><!-- Flashcard Content -->
+     <div id="flashcard-content">
+      <div class="mb-6">
+       <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium">Tiến độ</span> <span id="card-counter" class="text-sm font-medium">1 / 15</span>
        </div>
-      </div><!-- Learn Mode - Flashcards -->
-      <div id="learn-mode" class="vocabulary-mode">
-       <div class="flashcard" id="flashcard" style="height: 250px;">
-        <div class="flashcard-inner">
-         <div class="flashcard-front bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-          <div class="text-lg sm:text-2xl font-bold mb-2 sm:mb-4" id="word-text">
-           independent
-          </div>
-          <div class="text-xs sm:text-base mb-1 sm:mb-2" id="word-type">
-           (adj)
-          </div>
-          <div class="text-xs sm:text-sm" id="word-ipa">
-           /ˌɪndɪˈpendənt/
-          </div>
-          <div class="mt-3 sm:mt-4 text-xs opacity-80">
-           Nhấn để lật thẻ
-          </div>
-         </div>
-         <div class="flashcard-back bg-gradient-to-br from-green-500 to-green-600 text-white">
-          <div class="text-sm sm:text-lg font-semibold mb-2 sm:mb-4" id="word-meaning">
-           độc lập, tự lập
-          </div>
-          <div class="text-xs italic px-2" id="word-example">
-           "She wants to be independent from her parents."
-          </div>
-          <div class="mt-3 sm:mt-4 text-xs opacity-80">
-           Nhấn để lật lại
-          </div>
-         </div>
+       <div class="w-full h-3 rounded-full overflow-hidden">
+        <div id="vocab-progress-bar" class="progress-bar h-full" style="width: 6.67%"></div>
+       </div>
+      </div>
+      <div id="flashcard-container" class="flashcard">
+       <div class="flashcard-inner">
+        <div class="flashcard-front">
+         <p class="phonetic text-2xl mb-2" id="card-phonetic-front">/ˌdʒenəˈreɪʃən ɡæp/</p>
+         <p class="word-type text-xl mb-4" id="card-type-front" style="color: rgba(255, 255, 255, 0.9); font-style: italic;">Noun</p>
+         <h2 id="card-word">generation gap</h2>
+         <p class="text-lg mt-4">Nhấn Space hoặc Click để xem định nghĩa</p>
+        </div>
+        <div class="flashcard-back">
+         <h3 id="card-word-back">generation gap</h3>
+         <p class="definition" id="card-definition">Khoảng cách thế hệ - sự khác biệt về quan điểm giữa các thế hệ</p>
+         <p class="example" id="card-example">Example: The generation gap between parents and teenagers often leads to conflicts.</p>
         </div>
        </div>
-       <div class="flex justify-between items-center mt-4 sm:mt-6 gap-2"><button id="prev-word" class="bg-gray-500 hover:bg-gray-600 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm flex-shrink-0"> ← Trước </button>
-        <div class="text-center flex-1">
-         <div class="text-xs sm:text-base font-semibold" id="word-counter">
-          1 / 44
-         </div><button id="flip-card" class="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-1 sm:py-2 rounded-lg mt-1 sm:mt-2 transition-colors text-xs sm:text-sm"> Lật thẻ </button>
-        </div><button id="next-word" class="bg-blue-600 hover:bg-blue-700 text-white px-2 sm:px-4 py-2 rounded-lg transition-colors text-xs sm:text-sm flex-shrink-0"> Tiếp → </button>
+      </div>
+      <div class="flex justify-between mt-6 md:mt-8 max-w-md mx-auto gap-4"><button id="prev-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> ← Lùi </button> <button id="next-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> Tiếp → </button>
+      </div>
+      <p class="text-center mt-4 text-sm text-gray-600">Nhấn phím ← → để điều hướng, Space để lật thẻ</p>
+     </div><!-- Vocabulary Test Content -->
+     <div id="test-content" class="hidden">
+      <div class="mb-6">
+       <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium">Câu hỏi</span> <span id="test-counter" class="text-sm font-medium">1 / 46</span>
        </div>
-      </div><!-- Test Mode - Quiz -->
-      <div id="test-mode" class="vocabulary-mode hidden">
-       <div class="bg-white rounded-lg p-6 border-2 border-blue-100">
-        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2"><span class="text-2xl">📝</span> Kiểm tra từ vựng</h3>
-        <div id="vocabulary-quiz" class="space-y-4"><!-- Vocabulary quiz questions will be generated here -->
+       <div class="w-full h-3 rounded-full overflow-hidden">
+        <div id="test-progress-bar" class="progress-bar h-full" style="width: 2.17%"></div>
+       </div>
+      </div>
+      <div class="rounded-xl p-6 md:p-8 shadow-lg mb-6">
+       <h3 id="test-question" class="text-xl md:text-2xl font-bold mb-6">Choose the correct answer:</h3>
+       <div id="test-options" class="space-y-3"><!-- Options will be inserted here -->
+       </div>
+      </div>
+      <div id="test-feedback" class="rounded-xl p-4 md:p-6 shadow-lg mb-6 hidden">
+       <div class="flex items-start gap-3"><span id="feedback-icon" class="text-3xl"></span>
+        <div class="flex-1">
+         <p id="feedback-text" class="font-bold text-lg mb-2"></p>
+         <p id="feedback-explanation" class="text-sm"></p>
         </div>
-        <div class="mt-6 text-center"><button id="check-vocabulary" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg transition-colors shadow-lg"> Kiểm tra đáp án </button>
-         <div id="vocabulary-result" class="mt-4 text-lg font-semibold"></div>
-        </div>
+       </div>
+      </div>
+      <div class="flex justify-between mt-6 md:mt-8 max-w-md mx-auto gap-4"><button id="test-prev-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> ← Câu trước </button> <button id="test-next-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> Câu tiếp → </button>
+      </div>
+     </div>
+    </div><!-- Stereotypes Section -->
+    <div id="stereotypes-section" class="max-w-4xl mx-auto hidden">
+     <div class="rounded-xl p-6 md:p-8 shadow-lg mb-6">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Common Stereotypes About Generation Gap</h2>
+      <div class="space-y-6"><!-- Stereotype 1 -->
+       <div class="border-l-4 border-red-500 pl-4 py-2">
+        <h3 class="text-xl font-bold mb-2">❌ Stereotype #1: "Young people are lazy and entitled"</h3>
+        <p class="mb-3 text-gray-700"><strong>The Myth:</strong> Teenagers and young adults don't want to work hard and expect everything to be handed to them.</p>
+        <p class="text-green-700"><strong>✓ The Reality:</strong> Young people today face unprecedented challenges including student debt, competitive job markets, and economic uncertainty. Many work multiple jobs while studying and are highly motivated to succeed.</p>
+       </div><!-- Stereotype 2 -->
+       <div class="border-l-4 border-red-500 pl-4 py-2">
+        <h3 class="text-xl font-bold mb-2">❌ Stereotype #2: "Older generations don't understand technology"</h3>
+        <p class="mb-3 text-gray-700"><strong>The Myth:</strong> Parents and grandparents are completely clueless about modern technology and social media.</p>
+        <p class="text-green-700"><strong>✓ The Reality:</strong> Many older adults are tech-savvy and adapt quickly to new technologies. They may use technology differently, but that doesn't mean they don't understand it. Age doesn't determine technological ability.</p>
+       </div><!-- Stereotype 3 -->
+       <div class="border-l-4 border-red-500 pl-4 py-2">
+        <h3 class="text-xl font-bold mb-2">❌ Stereotype #3: "Teenagers are always rebellious and disrespectful"</h3>
+        <p class="mb-3 text-gray-700"><strong>The Myth:</strong> All teenagers go through a phase where they reject authority and disrespect their parents.</p>
+        <p class="text-green-700"><strong>✓ The Reality:</strong> While teenagers naturally seek independence, most maintain respectful relationships with their parents. Disagreements are normal and healthy parts of development, not signs of disrespect.</p>
+       </div><!-- Stereotype 4 -->
+       <div class="border-l-4 border-red-500 pl-4 py-2">
+        <h3 class="text-xl font-bold mb-2">❌ Stereotype #4: "Older people are stuck in their ways and can't change"</h3>
+        <p class="mb-3 text-gray-700"><strong>The Myth:</strong> Once people reach a certain age, they become inflexible and refuse to consider new ideas.</p>
+        <p class="text-green-700"><strong>✓ The Reality:</strong> People of all ages can learn, grow, and adapt. Many older adults embrace change and new perspectives. Life experience often brings wisdom and openness, not rigidity.</p>
+       </div><!-- Stereotype 5 -->
+       <div class="border-l-4 border-red-500 pl-4 py-2">
+        <h3 class="text-xl font-bold mb-2">❌ Stereotype #5: "Young people are addicted to their phones"</h3>
+        <p class="mb-3 text-gray-700"><strong>The Myth:</strong> Teenagers can't function without their smartphones and are constantly distracted by social media.</p>
+        <p class="text-green-700"><strong>✓ The Reality:</strong> While young people use technology frequently, they're often using it for productive purposes like learning, connecting with friends, and organizing activities. Adults use phones just as much, but for different purposes.</p>
+       </div><!-- Stereotype 6 -->
+       <div class="border-l-4 border-red-500 pl-4 py-2">
+        <h3 class="text-xl font-bold mb-2">❌ Stereotype #6: "Parents don't care about their children's feelings"</h3>
+        <p class="mb-3 text-gray-700"><strong>The Myth:</strong> Older generations are emotionally distant and don't value mental health or emotional well-being.</p>
+        <p class="text-green-700"><strong>✓ The Reality:</strong> Most parents deeply care about their children's emotional health. They may express concern differently based on their own upbringing, but their love and care are genuine.</p>
+       </div><!-- Key Takeaway -->
+       <div class="bg-blue-50 border-2 border-blue-300 rounded-lg p-6 mt-8">
+        <h3 class="text-xl font-bold mb-3">💡 Key Takeaway</h3>
+        <p class="mb-3">Stereotypes about generation gaps are harmful because they:</p>
+        <ul class="list-disc ml-6 space-y-2">
+         <li>Create unnecessary conflict and misunderstanding</li>
+         <li>Prevent genuine communication between generations</li>
+         <li>Ignore individual differences within each generation</li>
+         <li>Oversimplify complex social and cultural changes</li>
+        </ul>
+        <p class="mt-4 font-semibold">Instead of believing stereotypes, we should approach each person as an individual and build bridges through open communication, empathy, and mutual respect.</p>
        </div>
       </div>
      </div>
     </div><!-- Reading Section -->
-    <div id="reading-content" class="tab-content p-3 sm:p-6 hidden">
-     <div class="max-w-4xl mx-auto">
-      <h3 class="text-base sm:text-xl font-bold text-gray-800 mb-3 sm:mb-6">Bài đọc: The Generation Gap</h3>
-      <div class="bg-gray-50 rounded-lg p-3 sm:p-6 mb-4 sm:mb-8 text-xs sm:text-sm leading-relaxed">
-       <p class="mb-3 sm:mb-4">The <span class="highlight">generation gap</span> between parents and <span class="highlight">teenagers</span> has become a significant issue in modern families. Many young people desire to be <span class="highlight">independent</span> and make their own decisions, while parents often have <span class="highlight">strict</span> <span class="highlight">rules</span> and worry about their children's future. This can lead to frequent <span class="highlight">arguments</span> when teenagers <span class="highlight">complain</span> about their parents being too controlling.</p>
-       <p class="mb-3 sm:mb-4">Parents may <span class="highlight">nag</span> their children about doing <span class="highlight">laundry</span>, cleaning their rooms, or helping with household tasks like loading the <span class="highlight">dishwasher</span>. Meanwhile, teenagers often feel <span class="highlight">powerless</span> and want more <span class="highlight">pocket money</span> and freedom. Some parents have <span class="highlight">old-fashioned</span> ideas about <span class="highlight">technology</span>, while their children are <span class="highlight">technologically</span> advanced and follow the latest <span class="highlight">trends</span>.</p>
-       <p>However, <span class="highlight">easy-going</span> parents who are <span class="highlight">reliable</span> and understanding can build better <span class="highlight">relationships</span> with their children. Young people need to learn good <span class="highlight">manners</span> and become <span class="highlight">self-reliant</span> individuals. <span class="highlight">Therefore</span>, both generations should <span class="highlight">carry on</span> working together and <span class="highlight">carry out</span> their responsibilities. Parents can <span class="highlight">rely</span> on their teenagers to be more mature, while children should not feel <span class="highlight">worried</span> about expressing their need for <span class="highlight">independence</span>.</p>
+    <div id="reading-section" class="max-w-4xl mx-auto hidden">
+     <div class="rounded-xl p-6 md:p-8 shadow-lg mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Bài đọc: Bridging the Generation Gap</h2>
+      <div class="reading-passage mb-6">
+       <p class="mb-4">The <span class="highlight">generation gap</span> has always existed, but it seems more pronounced today than ever before. Young people seek <span class="highlight" style="text-decoration: underline; font-weight: 600;">"independence"</span> and want to make their own decisions, while older generations often struggle to understand modern values and lifestyles. [I] This <span class="highlight">conflict</span> can create tension within families, but it doesn't have to be destructive.</p>
+       <p class="mb-4">Many teenagers desire <span class="highlight">freedom</span> to express themselves and pursue <span class="highlight" style="text-decoration: underline; font-weight: 600;">"their"</span> dreams. They want to be <span class="highlight">self-reliant</span> and prove they can handle <span class="highlight">responsibilities</span>. However, parents worry about their children's safety and future. [II] They have more life experience and want to protect their children from making mistakes. This protective instinct sometimes comes across as being too <span class="highlight">controlling</span>.</p>
+       <p class="mb-4">Communication is key to bridging this gap. Both generations need to practice <span class="highlight">empathy</span> and try to understand each other's perspectives. [III] Young people should respect their elders' wisdom and experience, while parents should not <span class="highlight" style="text-decoration: underline; font-weight: 600;">"dismiss"</span> their children's opinions and feelings. <span style="text-decoration: underline; font-weight: 600;">"Healthy communication, trust, and problem-solving skills are key to resolving disagreements."</span> When families create an environment of mutual <span class="highlight">respect</span> and open dialogue, the generation gap becomes less of a barrier and more of an opportunity for growth.</p>
+       <p>Living <span class="highlight">independently</span> is an important milestone for young adults. [IV] It teaches valuable life skills like managing finances, cooking, and solving problems. While parents may find it difficult to let go, supporting their children's journey toward independence ultimately strengthens family bonds. The goal isn't to eliminate differences between generations, but to celebrate them while maintaining strong, loving relationships.</p>
       </div>
-      <h4 class="text-sm sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Câu hỏi trắc nghiệm</h4>
-      <div id="reading-quiz" class="space-y-3 sm:space-y-4"><!-- Quiz questions will be generated here -->
-      </div>
-      <div class="mt-4 sm:mt-6 text-center"><button id="check-reading" class="bg-purple-600 hover:bg-purple-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors text-xs sm:text-sm"> Kiểm tra đáp án </button>
-       <div id="reading-result" class="mt-3 sm:mt-4 text-xs sm:text-base font-semibold"></div>
-      </div>
+     </div><!-- Reading Quiz -->
+     <div class="rounded-xl p-6 md:p-8 shadow-lg">
+      <h3 class="text-xl md:text-2xl font-bold mb-6">Câu hỏi trắc nghiệm</h3>
+      <div id="reading-quiz-container"><!-- Questions will be inserted here -->
+      </div><button id="submit-reading" class="control-button w-full mt-6 px-6 py-3 rounded-lg font-semibold text-white"> Nộp bài </button>
+      <div id="reading-feedback" class="mt-4 p-4 rounded-lg hidden"></div>
      </div>
     </div><!-- Grammar Section -->
-    <div id="grammar-content" class="tab-content p-3 sm:p-6 hidden">
-     <div class="max-w-4xl mx-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-8">
-       <div class="space-y-2"><button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="present-simple"> Present Simple </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="present-continuous"> Present Continuous </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="stative-verbs"> Stative Verbs </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="linking-verbs"> Linking Verbs </button>
-       </div>
-       <div class="space-y-2"><button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="compound-sentences"> Compound Sentences </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="negative-inversion"> Đảo ngữ phủ định </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-xs sm:text-sm" data-topic="no-inversion"> Đảo ngữ cụm từ "No" </button> <button class="grammar-topic w-full text-left p-2 sm:p-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-xs sm:text-sm" data-topic="comprehensive-test"> <span class="hidden sm:inline">Bài tập tổng hợp (30 câu)</span> <span class="sm:hidden">Tổng hợp (30 câu)</span> </button>
-       </div>
-      </div><!-- Grammar Theory Content -->
-      <div id="grammar-theory" class="bg-gray-50 rounded-lg p-3 sm:p-6">
-       <div id="present-simple" class="grammar-content">
-        <h3 class="text-base sm:text-lg font-bold mb-4">Present Simple</h3>
-        <p class="mb-4">Thì hiện tại đơn diễn tả hành động thường xuyên, sự thật hiển nhiên, hoặc thói quen.</p>
-        <div class="bg-white p-4 rounded-lg">
-         <h4 class="font-semibold mb-2">Cấu trúc:</h4>
-         <p>• Khẳng định: S + V(s/es) + O</p>
-         <p>• Phủ định: S + don't/doesn't + V + O</p>
-         <p>• Nghi vấn: Do/Does + S + V + O?</p>
-         <h4 class="font-semibold mt-4 mb-2">Ví dụ:</h4>
-         <p>• She studies English every day.</p>
-         <p>• They don't live in the city.</p>
-         <p>• Do you like coffee?</p>
+    <div id="grammar-section" class="max-w-4xl mx-auto hidden">
+     <div class="space-y-4 md:space-y-6"><!-- Grammar Topics -->
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="present-simple"> <h3 class="text-lg md:text-2xl font-bold">Present Simple</h3><span class="text-2xl">+</span> </button>
+       <div id="present-simple" class="grammar-content mt-4">
+        <p class="mb-4"><strong>Cấu trúc:</strong></p>
+        <ul class="list-disc ml-6 mb-4">
+         <li>Khẳng định: S + V(s/es)</li>
+         <li>Phủ định: S + do/does + not + V</li>
+         <li>Nghi vấn: Do/Does + S + V?</li>
+        </ul>
+        <p class="mb-4"><strong>Cách dùng:</strong> Diễn tả thói quen, sự thật hiển nhiên, lịch trình cố định</p>
+        <div class="p-4 rounded-lg mt-4">
+         <p class="mb-2"><span class="highlight">Example:</span> Teenagers often disagree with their parents.</p>
+         <p><span class="highlight">Example:</span> My grandmother doesn't understand social media.</p>
         </div>
        </div>
-       <div id="present-continuous" class="grammar-content">
-        <h3 class="text-xl font-bold mb-4">Present Continuous</h3>
-        <p class="mb-4">Thì hiện tại tiếp diễn diễn tả hành động đang xảy ra tại thời điểm nói.</p>
-        <div class="bg-white p-4 rounded-lg">
-         <h4 class="font-semibold mb-2">Cấu trúc:</h4>
-         <p>• Khẳng định: S + am/is/are + V-ing + O</p>
-         <p>• Phủ định: S + am/is/are + not + V-ing + O</p>
-         <p>• Nghi vấn: Am/Is/Are + S + V-ing + O?</p>
-         <h4 class="font-semibold mt-4 mb-2">Ví dụ:</h4>
-         <p>• I am studying now.</p>
-         <p>• She isn't working today.</p>
-         <p>• Are they coming to the party?</p>
+      </div>
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="present-continuous"> <h3 class="text-lg md:text-2xl font-bold">Present Continuous</h3><span class="text-2xl">+</span> </button>
+       <div id="present-continuous" class="grammar-content mt-4">
+        <p class="mb-4"><strong>Cấu trúc:</strong></p>
+        <ul class="list-disc ml-6 mb-4">
+         <li>Khẳng định: S + am/is/are + V-ing</li>
+         <li>Phủ định: S + am/is/are + not + V-ing</li>
+         <li>Nghi vấn: Am/Is/Are + S + V-ing?</li>
+        </ul>
+        <p class="mb-4"><strong>Cách dùng:</strong> Diễn tả hành động đang xảy ra, kế hoạch tương lai gần</p>
+        <div class="p-4 rounded-lg mt-4">
+         <p class="mb-2"><span class="highlight">Example:</span> I am learning to be more independent.</p>
+         <p><span class="highlight">Example:</span> My parents are trying to understand my perspective.</p>
         </div>
        </div>
-       <div id="stative-verbs" class="grammar-content">
-        <h3 class="text-xl font-bold mb-4">Stative Verbs</h3>
-        <p class="mb-4">Động từ chỉ trạng thái không được chia ở thì tiếp diễn.</p>
-        <div class="bg-white p-4 rounded-lg">
-         <h4 class="font-semibold mb-2">Các động từ chỉ trạng thái:</h4>
-         <p>• Cảm xúc: love, hate, like, prefer, want</p>
-         <p>• Tri giác: see, hear, smell, taste, feel</p>
-         <p>• Tư duy: think, believe, know, understand, remember</p>
-         <p>• Sở hữu: have, own, belong, possess</p>
-         <h4 class="font-semibold mt-4 mb-2">Ví dụ:</h4>
-         <p>• I love chocolate. (không nói "I am loving")</p>
-         <p>• She knows the answer.</p>
+      </div>
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="stative-verbs"> <h3 class="text-lg md:text-2xl font-bold">Stative Verbs</h3><span class="text-2xl">+</span> </button>
+       <div id="stative-verbs" class="grammar-content mt-4">
+        <p class="mb-4"><strong>Định nghĩa:</strong> Động từ chỉ trạng thái, không dùng ở thì tiếp diễn</p>
+        <p class="mb-4"><strong>Các nhóm:</strong></p>
+        <ul class="list-disc ml-6 mb-4">
+         <li>Cảm xúc: love, hate, like, prefer, want</li>
+         <li>Suy nghĩ: know, believe, understand, remember</li>
+         <li>Sở hữu: have, own, belong, possess</li>
+         <li>Giác quan: see, hear, smell, taste</li>
+        </ul>
+        <div class="p-4 rounded-lg mt-4">
+         <p class="mb-2"><span class="highlight">Correct:</span> I understand your concerns.</p>
+         <p class="mb-2"><span class="highlight">Incorrect:</span> I am understanding your concerns.</p>
+         <p><span class="highlight">Example:</span> She wants more freedom.</p>
         </div>
        </div>
-       <div id="linking-verbs" class="grammar-content">
-        <h3 class="text-xl font-bold mb-4">Linking Verbs</h3>
-        <p class="mb-4">Động từ liên kết nối chủ ngữ với tính từ hoặc danh từ bổ nghĩa.</p>
-        <div class="bg-white p-4 rounded-lg">
-         <h4 class="font-semibold mb-2">Các động từ liên kết:</h4>
-         <p>• be, seem, appear, look, sound, smell, taste, feel</p>
-         <p>• become, get, grow, turn, go</p>
-         <h4 class="font-semibold mt-4 mb-2">Ví dụ:</h4>
-         <p>• She looks tired.</p>
-         <p>• The food smells delicious.</p>
-         <p>• He became a doctor.</p>
+      </div>
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="linking-verbs"> <h3 class="text-lg md:text-2xl font-bold">Linking Verbs</h3><span class="text-2xl">+</span> </button>
+       <div id="linking-verbs" class="grammar-content mt-4">
+        <p class="mb-4"><strong>Định nghĩa:</strong> Động từ nối chủ ngữ với tính từ/danh từ bổ nghĩa</p>
+        <p class="mb-4"><strong>Các linking verbs phổ biến:</strong> be, become, seem, appear, look, sound, feel, taste, smell, remain, stay</p>
+        <div class="p-4 rounded-lg mt-4">
+         <p class="mb-2"><span class="highlight">Example:</span> My parents seem worried about my future.</p>
+         <p class="mb-2"><span class="highlight">Example:</span> Independence feels liberating.</p>
+         <p><span class="highlight">Example:</span> The situation remains tense.</p>
         </div>
        </div>
-       <div id="compound-sentences" class="grammar-content">
-        <h3 class="text-xl font-bold mb-4">Compound Sentences</h3>
-        <p class="mb-4">Câu ghép gồm hai hoặc nhiều mệnh đề độc lập được nối bằng liên từ.</p>
-        <div class="bg-white p-4 rounded-lg">
-         <h4 class="font-semibold mb-2">Liên từ phối hợp:</h4>
-         <p>• and (và), but (nhưng), or (hoặc), so (vì vậy)</p>
-         <p>• for (vì), nor (cũng không), yet (tuy nhiên)</p>
-         <h4 class="font-semibold mt-4 mb-2">Ví dụ:</h4>
-         <p>• I studied hard, and I passed the exam.</p>
-         <p>• She wanted to go, but it was raining.</p>
+      </div>
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="compound-sentence"> <h3 class="text-lg md:text-2xl font-bold">Compound Sentences</h3><span class="text-2xl">+</span> </button>
+       <div id="compound-sentence" class="grammar-content mt-4">
+        <p class="mb-4"><strong>Cấu trúc:</strong> Câu ghép = Mệnh đề 1 + liên từ + Mệnh đề 2</p>
+        <p class="mb-4"><strong>Liên từ:</strong> and, but, or, so, for, yet, nor</p>
+        <div class="p-4 rounded-lg mt-4">
+         <p class="mb-2"><span class="highlight">Example:</span> I want independence, but I also need my parents' support.</p>
+         <p class="mb-2"><span class="highlight">Example:</span> Teenagers seek freedom, and parents want safety.</p>
+         <p><span class="highlight">Example:</span> We can argue, or we can find a compromise.</p>
         </div>
        </div>
-       <div id="negative-inversion" class="grammar-content">
-        <h3 class="text-xl font-bold mb-4">Đảo ngữ phủ định</h3>
-        <p class="mb-4">Đảo ngữ với các từ phủ định để nhấn mạnh.</p>
-        <div class="bg-white p-4 rounded-lg">
-         <h4 class="font-semibold mb-2">Cấu trúc:</h4>
-         <p>• Never/Rarely/Seldom + trợ động từ + S + V</p>
-         <p>• Not only + trợ động từ + S + V + but also...</p>
-         <h4 class="font-semibold mt-4 mb-2">Ví dụ:</h4>
-         <p>• Never have I seen such a beautiful sunset.</p>
-         <p>• Rarely does she come late.</p>
-         <p>• Not only did he study hard, but he also helped others.</p>
+      </div>
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="negative-inversion"> <h3 class="text-lg md:text-2xl font-bold">Đảo ngữ phủ định</h3><span class="text-2xl">+</span> </button>
+       <div id="negative-inversion" class="grammar-content mt-4">
+        <p class="mb-4"><strong>Cấu trúc:</strong> Trạng từ phủ định + trợ động từ + S + V</p>
+        <p class="mb-4"><strong>Các từ:</strong> Never, Rarely, Seldom, Hardly, Scarcely, Not only, Little</p>
+        <div class="p-4 rounded-lg mt-4">
+         <p class="mb-2"><span class="highlight">Normal:</span> I have never seen such a big generation gap.</p>
+         <p class="mb-2"><span class="highlight">Inversion:</span> Never have I seen such a big generation gap.</p>
+         <p><span class="highlight">Example:</span> Rarely do parents and teenagers agree on everything.</p>
         </div>
        </div>
-       <div id="no-inversion" class="grammar-content">
-        <h3 class="text-xl font-bold mb-4">Đảo ngữ cụm từ "No"</h3>
-        <p class="mb-4">Đảo ngữ với các cụm từ bắt đầu bằng "No".</p>
-        <div class="bg-white p-4 rounded-lg">
-         <h4 class="font-semibold mb-2">Cấu trúc:</h4>
-         <p>• No sooner + had + S + V3 + than + S + V2</p>
-         <p>• No longer + trợ động từ + S + V</p>
-         <p>• At no time + trợ động từ + S + V</p>
-         <h4 class="font-semibold mt-4 mb-2">Ví dụ:</h4>
-         <p>• No sooner had I arrived than it started raining.</p>
-         <p>• No longer does she live here.</p>
-         <p>• At no time did he mention the problem.</p>
+      </div>
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="no-inversion"> <h3 class="text-lg md:text-2xl font-bold">Đảo ngữ với No</h3><span class="text-2xl">+</span> </button>
+       <div id="no-inversion" class="grammar-content mt-4">
+        <p class="mb-4"><strong>Cấu trúc:</strong> No + N + trợ động từ + S + V</p>
+        <p class="mb-4"><strong>Các cụm từ:</strong> No sooner, At no time, Under no circumstances, On no account</p>
+        <div class="p-4 rounded-lg mt-4">
+         <p class="mb-2"><span class="highlight">Example:</span> No sooner had I left home than I missed my family.</p>
+         <p class="mb-2"><span class="highlight">Example:</span> At no time did my parents stop supporting me.</p>
+         <p><span class="highlight">Example:</span> Under no circumstances should you give up your dreams.</p>
         </div>
        </div>
-       <div id="comprehensive-test" class="grammar-content">
-        <h3 class="text-xl font-bold mb-4">Bài tập tổng hợp</h3>
-        <div id="comprehensive-quiz" class="space-y-4"><!-- Comprehensive quiz will be generated here -->
+      </div><!-- Comprehensive Test -->
+      <div class="rounded-xl p-4 md:p-6 shadow-lg"><button class="grammar-toggle w-full text-left flex justify-between items-center" data-target="comprehensive-test"> <h3 class="text-lg md:text-2xl font-bold">Bài tập tổng hợp (30 câu)</h3><span class="text-2xl">+</span> </button>
+       <div id="comprehensive-test" class="grammar-content mt-4">
+        <div class="mb-6">
+         <div class="flex justify-between items-center mb-2"><span class="text-sm font-medium">Câu hỏi</span> <span id="grammar-counter" class="text-sm font-medium">1 / 30</span>
+         </div>
+         <div class="w-full h-3 rounded-full overflow-hidden">
+          <div id="grammar-progress-bar" class="progress-bar h-full" style="width: 3.33%"></div>
+         </div>
         </div>
-        <div class="mt-6 text-center"><button id="check-comprehensive" class="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg transition-colors"> Kiểm tra đáp án </button>
-         <div id="comprehensive-result" class="mt-4 text-lg font-semibold"></div>
+        <div id="grammar-quiz-container" class="rounded-xl p-6 md:p-8 shadow-lg mb-6">
+         <h3 id="grammar-question" class="text-xl md:text-2xl font-bold mb-6"></h3>
+         <div id="grammar-options" class="space-y-3"><!-- Options will be inserted here -->
+         </div>
         </div>
-       </div>
-       <div class="text-center mt-6">
-        <p class="text-gray-600">Chọn một chủ đề ngữ pháp để bắt đầu học</p>
+        <div id="grammar-feedback-box" class="rounded-xl p-4 md:p-6 shadow-lg mb-6 hidden">
+         <div class="flex items-start gap-3"><span id="grammar-feedback-icon" class="text-3xl"></span>
+          <div class="flex-1">
+           <p id="grammar-feedback-text" class="font-bold text-lg mb-2"></p>
+           <p id="grammar-feedback-explanation" class="text-sm"></p>
+          </div>
+         </div>
+        </div>
+        <div class="flex justify-between mt-6 md:mt-8 max-w-md mx-auto gap-4"><button id="grammar-prev-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> ← Câu trước </button> <button id="grammar-next-btn" class="control-button px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold text-white text-sm md:text-base flex-1"> Câu tiếp → </button>
+        </div>
        </div>
       </div>
      </div>
     </div>
-   </div>
+   </main>
   </div>
   <script>
-        // Vocabulary data
-        const vocabulary = [
+    const defaultConfig = {
+      background_color: "#f0f9ff",
+      surface_color: "#ffffff",
+      text_color: "#1e293b",
+      primary_action_color: "#3b82f6",
+      secondary_action_color: "#8b5cf6",
+      unit_title: "Unit 1: Generation Gap and Independence Life",
+      total_progress_label: "Tổng tiến độ",
+      vocab_progress_label: "Từ vựng",
+      reading_progress_label: "Bài đọc",
+      grammar_progress_label: "Ngữ pháp",
+      vocabulary_tab: "📚 Từ vựng",
+      reading_tab: "📖 Bài đọc",
+      grammar_tab: "✏️ Ngữ pháp",
+      home_button: "🏠 Trang chủ"
+    };
+
+    let currentCardIndex = 0;
+    let currentTestIndex = 0;
+    let currentGrammarIndex = 0;
+    let userProgress = null;
+    let readingAnswers = {};
+    let grammarAnswers = {};
+    let vocabularyTestAnswers = {};
+
+    // Sound effects using Web Audio API
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playCorrectSound() {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    }
+    
+    function playIncorrectSound() {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(150, audioContext.currentTime + 0.1);
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    }
+
+    const vocabularyCards = [
+      {
+        word: "generation gap",
+        phonetic: "/ˌdʒenəˈreɪʃən ɡæp/",
+        type: "Noun",
+        definition: "Khoảng cách thế hệ - sự khác biệt về quan điểm giữa các thế hệ",
+        example: "The generation gap between parents and teenagers often leads to conflicts."
+      },
+      {
+        word: "independence",
+        phonetic: "/ˌɪndɪˈpendəns/",
+        type: "Noun",
+        definition: "Sự độc lập - khả năng tự chủ không phụ thuộc vào người khác",
+        example: "Living alone teaches you independence and responsibility."
+      },
+      {
+        word: "teenager",
+        phonetic: "/ˈtiːneɪdʒə(r)/",
+        type: "Noun",
+        definition: "Thanh thiếu niên - người từ 13 đến 19 tuổi",
+        example: "Teenagers often want more freedom from their parents."
+      },
+      {
+        word: "self-reliant",
+        phonetic: "/ˌself rɪˈlaɪənt/",
+        type: "Adjective",
+        definition: "Tự lực - có khả năng tự lo liệu cho bản thân",
+        example: "Being self-reliant is an important life skill for young adults."
+      },
+      {
+        word: "strict",
+        phonetic: "/strɪkt/",
+        type: "Adjective",
+        definition: "Nghiêm khắc - đòi hỏi tuân thủ quy tắc một cách chặt chẽ",
+        example: "My parents are very strict about my curfew time."
+      },
+      {
+        word: "argument",
+        phonetic: "/ˈɑːɡjumənt/",
+        type: "Noun",
+        definition: "Cuộc tranh cãi - sự bất đồng quan điểm gay gắt",
+        example: "We had an argument about my pocket money yesterday."
+      },
+      {
+        word: "complain",
+        phonetic: "/kəmˈpleɪn/",
+        type: "Verb",
+        definition: "Than phiền - bày tỏ sự không hài lòng",
+        example: "My grandmother always complains about modern technology."
+      },
+      {
+        word: "relationship",
+        phonetic: "/rɪˈleɪʃnʃɪp/",
+        type: "Noun",
+        definition: "Mối quan hệ - sự kết nối giữa người với người",
+        example: "A good relationship with parents requires communication."
+      },
+      {
+        word: "independent",
+        phonetic: "/ˌɪndɪˈpendənt/",
+        type: "Adjective",
+        definition: "Độc lập - không phụ thuộc vào người khác",
+        example: "She became more independent after moving to university."
+      },
+      {
+        word: "technology",
+        phonetic: "/tekˈnɒlədʒi/",
+        type: "Noun",
+        definition: "Công nghệ - ứng dụng khoa học vào thực tiễn",
+        example: "Modern technology has changed how teenagers communicate."
+      },
+      {
+        word: "old-fashioned",
+        phonetic: "/ˌəʊld ˈfæʃnd/",
+        type: "Adjective",
+        definition: "Lỗi thời - thuộc về quá khứ, không còn phổ biến",
+        example: "My parents have some old-fashioned ideas about dating."
+      },
+      {
+        word: "trend",
+        phonetic: "/trend/",
+        type: "Noun",
+        definition: "Xu hướng - điều đang thịnh hành trong một thời kỳ",
+        example: "Following fashion trends is important to many teenagers."
+      },
+      {
+        word: "rules",
+        phonetic: "/ruːlz/",
+        type: "Noun",
+        definition: "Quy tắc - những nguyên tắc cần tuân theo",
+        example: "Every family has different rules about using smartphones."
+      },
+      {
+        word: "pocket money",
+        phonetic: "/ˈpɒkɪt ˌmʌni/",
+        type: "Noun",
+        definition: "Tiền tiêu vặt - số tiền cho con để chi tiêu cá nhân",
+        example: "I receive pocket money every week for doing chores."
+      },
+      {
+        word: "reliable",
+        phonetic: "/rɪˈlaɪəbl/",
+        type: "Adjective",
+        definition: "Đáng tin cậy - có thể tin tưởng và phụ thuộc vào",
+        example: "My older sister is very reliable and always keeps her promises."
+      },
+      {
+        word: "worried",
+        phonetic: "/ˈwʌrid/",
+        type: "Adjective",
+        definition: "Lo lắng - cảm thấy bất an về điều gì đó",
+        example: "Parents are often worried about their children's safety."
+      },
+      {
+        word: "therefore",
+        phonetic: "/ˈðeəfɔː(r)/",
+        type: "Adverb",
+        definition: "Do đó - vì vậy, vì lý do đó",
+        example: "I studied hard; therefore, I passed the exam."
+      },
+      {
+        word: "argue",
+        phonetic: "/ˈɑːɡjuː/",
+        type: "Verb",
+        definition: "Tranh luận - bày tỏ ý kiến bất đồng",
+        example: "Teenagers often argue with their parents about freedom."
+      },
+      {
+        word: "completely",
+        phonetic: "/kəmˈpliːtli/",
+        type: "Adverb",
+        definition: "Hoàn toàn - một cách trọn vẹn, toàn bộ",
+        example: "I completely understand your point of view."
+      },
+      {
+        word: "easy-going",
+        phonetic: "/ˌiːzi ˈɡəʊɪŋ/",
+        type: "Adjective",
+        definition: "Dễ tính - thoải mái, không khắt khe",
+        example: "My father is more easy-going than my mother."
+      },
+      {
+        word: "generation",
+        phonetic: "/ˌdʒenəˈreɪʃn/",
+        type: "Noun",
+        definition: "Thế hệ - nhóm người sinh trong cùng thời kỳ",
+        example: "Each generation has its own values and beliefs."
+      },
+      {
+        word: "laundry",
+        phonetic: "/ˈlɔːndri/",
+        type: "Noun",
+        definition: "Giặt giũ - công việc giặt quần áo",
+        example: "I do my own laundry every weekend."
+      },
+      {
+        word: "manner",
+        phonetic: "/ˈmænə(r)/",
+        type: "Noun",
+        definition: "Cách cư xử - phong cách ứng xử với người khác",
+        example: "Good manners are important in social situations."
+      },
+      {
+        word: "nag",
+        phonetic: "/næɡ/",
+        type: "Verb",
+        definition: "Càu nhàu - liên tục nhắc nhở một cách khó chịu",
+        example: "My mom nags me about cleaning my room every day."
+      },
+      {
+        word: "rely",
+        phonetic: "/rɪˈlaɪ/",
+        type: "Verb",
+        definition: "Dựa vào - tin tưởng và phụ thuộc vào ai/cái gì",
+        example: "You can rely on me to help you with homework."
+      },
+      {
+        word: "dishwasher",
+        phonetic: "/ˈdɪʃwɒʃə(r)/",
+        type: "Noun",
+        definition: "Máy rửa bát - thiết bị tự động rửa chén đĩa",
+        example: "We bought a new dishwasher to save time."
+      },
+      {
+        word: "furniture",
+        phonetic: "/ˈfɜːnɪtʃə(r)/",
+        type: "Noun",
+        definition: "Đồ nội thất - bàn ghế và đồ dùng trong nhà",
+        example: "They bought new furniture for their apartment."
+      },
+      {
+        word: "sporting event",
+        phonetic: "/ˈspɔːtɪŋ ɪˈvent/",
+        type: "Noun",
+        definition: "Sự kiện thể thao - cuộc thi đấu thể thao",
+        example: "We attended a sporting event at the stadium last weekend."
+      },
+      {
+        word: "build robots",
+        phonetic: "/bɪld ˈrəʊbɒts/",
+        type: "Verb phrase",
+        definition: "Chế tạo robot - tạo ra người máy",
+        example: "My brother loves to build robots in his free time."
+      },
+      {
+        word: "carry out",
+        phonetic: "/ˈkæri aʊt/",
+        type: "Phrasal verb",
+        definition: "Thực hiện - tiến hành làm điều gì đó",
+        example: "We need to carry out this plan carefully."
+      },
+      {
+        word: "difficult",
+        phonetic: "/ˈdɪfɪkəlt/",
+        type: "Adjective",
+        definition: "Khó khăn - không dễ dàng thực hiện",
+        example: "It's difficult to balance independence and family expectations."
+      },
+      {
+        word: "power",
+        phonetic: "/ˈpaʊə(r)/",
+        type: "Noun",
+        definition: "Quyền lực - khả năng kiểm soát hoặc ảnh hưởng",
+        example: "Parents have the power to set rules in the house."
+      },
+      {
+        word: "fairly",
+        phonetic: "/ˈfeəli/",
+        type: "Adverb",
+        definition: "Khá - ở mức độ vừa phải",
+        example: "I'm fairly good at managing my time."
+      },
+      {
+        word: "technological",
+        phonetic: "/ˌteknəˈlɒdʒɪkl/",
+        type: "Adjective",
+        definition: "Thuộc về công nghệ - liên quan đến kỹ thuật",
+        example: "We live in a technological age with smartphones everywhere."
+      },
+      {
+        word: "complaint",
+        phonetic: "/kəmˈpleɪnt/",
+        type: "Noun",
+        definition: "Lời phàn nàn - sự bày tỏ không hài lòng",
+        example: "The teacher received many complaints about homework."
+      },
+      {
+        word: "rug",
+        phonetic: "/rʌɡ/",
+        type: "Noun",
+        definition: "Tấm thảm - miếng vải trải sàn",
+        example: "We have a beautiful rug in the living room."
+      },
+      {
+        word: "set",
+        phonetic: "/set/",
+        type: "Verb",
+        definition: "Đặt ra - thiết lập quy tắc hoặc mục tiêu",
+        example: "Parents set rules to keep their children safe."
+      },
+      {
+        word: "skating",
+        phonetic: "/ˈskeɪtɪŋ/",
+        type: "Noun",
+        definition: "Trượt băng/patin - môn thể thao trượt trên băng hoặc đường",
+        example: "Ice skating is a popular winter activity."
+      },
+      {
+        word: "afterward",
+        phonetic: "/ˈɑːftəwəd/",
+        type: "Adverb",
+        definition: "Sau đó - ở thời điểm sau một sự kiện",
+        example: "We had dinner and went to the cinema afterward."
+      },
+      {
+        word: "complete",
+        phonetic: "/kəmˈpliːt/",
+        type: "Verb/Adjective",
+        definition: "Hoàn thành - làm xong hoặc đầy đủ",
+        example: "I need to complete my homework before dinner."
+      },
+      {
+        word: "nap",
+        phonetic: "/næp/",
+        type: "Noun/Verb",
+        definition: "Giấc ngủ ngắn - ngủ một chút trong ngày",
+        example: "My grandmother takes a nap every afternoon."
+      },
+      {
+        word: "news",
+        phonetic: "/njuːz/",
+        type: "Noun",
+        definition: "Tin tức - thông tin về sự kiện hiện tại",
+        example: "My parents watch the news every evening."
+      },
+      {
+        word: "powerless",
+        phonetic: "/ˈpaʊələs/",
+        type: "Adjective",
+        definition: "Bất lực - không có khả năng làm gì",
+        example: "Teenagers sometimes feel powerless in family decisions."
+      },
+      {
+        word: "technologically",
+        phonetic: "/ˌteknəˈlɒdʒɪkli/",
+        type: "Adverb",
+        definition: "Về mặt công nghệ - theo cách liên quan đến kỹ thuật",
+        example: "Society is advancing technologically very fast."
+      },
+      {
+        word: "powerlessness",
+        phonetic: "/ˈpaʊələsnəs/",
+        type: "Noun",
+        definition: "Sự bất lực - trạng thái không có quyền lực",
+        example: "The feeling of powerlessness can be frustrating for teens."
+      },
+      {
+        word: "carry on",
+        phonetic: "/ˈkæri ɒn/",
+        type: "Phrasal verb",
+        definition: "Tiếp tục - duy trì làm điều gì đó",
+        example: "We must carry on with our studies despite difficulties."
+      }
+    ];
+
+    const readingQuestions = [
+      {
+        question: "1. The word \"independence\" in paragraph 1 is CLOSEST in meaning to ________________.",
+        options: ["A. self-reliance", "B. attention", "C. patience", "D. guidance"],
+        correct: 0
+      },
+      {
+        question: "2. What does the word \"their\" in paragraph 2 refer to?",
+        options: ["A. parents'", "B. teenagers'", "C. disagreements'", "D. teachers'"],
+        correct: 1
+      },
+      {
+        question: "3. The word \"dismiss\" in paragraph 3 is OPPOSITE in meaning to ________________.",
+        options: ["A. ignore", "B. refuse", "C. respect", "D. confuse"],
+        correct: 2
+      },
+      {
+        question: "4. In which paragraph does the writer explain how parents and teens can manage conflicts?",
+        options: ["A. Paragraph 1", "B. Paragraph 2", "C. Paragraph 3", "D. Paragraph 4"],
+        correct: 2
+      },
+      {
+        question: "5. Where in the passage does the following sentence best fit?\n\"This can hide deeper emotions and prevent healthy communication.\"",
+        options: ["A. [I]", "B. [II]", "C. [III]", "D. [IV]"],
+        correct: 1
+      },
+      {
+        question: "6. Which of the following is TRUE according to the passage?",
+        options: [
+          "A. Conflicts between parents and teens always harm relationships.",
+          "B. Young people want to be self-reliant and handle responsibilities.",
+          "C. Parents should eliminate all differences between generations.",
+          "D. Living independently weakens family bonds."
+        ],
+        correct: 1
+      },
+      {
+        question: "7. Which of the following best paraphrases the underlined sentence in paragraph 3?\n\"Healthy communication, trust, and problem-solving skills are key to resolving disagreements.\"",
+        options: [
+          "A. Understanding, honesty, and cooperation help families handle conflicts effectively.",
+          "B. Not until parents are healthy that unnecessary arguments can be solved.",
+          "C. Disagreements can be solved only if teenagers completely obey their parents.",
+          "D. Good communication makes all family problems disappear immediately."
+        ],
+        correct: 0
+      },
+      {
+        question: "8. Which can be inferred from the passage?",
+        options: [
+          "A. Parents should try to stop all conflicts between themselves and their children.",
+          "B. The generation gap only exists in modern times and not in the past.",
+          "C. Teenagers' emotional problems are mainly caused by their school performance.",
+          "D. Open and respectful communication can turn conflicts into chances for growth."
+        ],
+        correct: 3
+      }
+    ];
+
+    const vocabularyTestQuestions = [
+      {
+        question: "What does 'generation gap' mean?",
+        options: ["A. Khoảng cách địa lý", "B. Khoảng cách thế hệ", "C. Khoảng cách thời gian", "D. Khoảng cách văn hóa"],
+        correct: 1,
+        explanation: "Generation gap = Khoảng cách thế hệ - sự khác biệt về quan điểm giữa các thế hệ"
+      },
+      {
+        question: "Choose the correct definition of 'independence':",
+        options: ["A. Sự phụ thuộc", "B. Sự độc lập", "C. Sự tự do", "D. Sự riêng tư"],
+        correct: 1,
+        explanation: "Independence = Sự độc lập - khả năng tự chủ không phụ thuộc vào người khác"
+      },
+      {
+        question: "A person aged 13-19 is called a _____.",
+        options: ["A. child", "B. teenager", "C. adult", "D. senior"],
+        correct: 1,
+        explanation: "Teenager = Thanh thiếu niên - người từ 13 đến 19 tuổi"
+      },
+      {
+        question: "'Self-reliant' means:",
+        options: ["A. Tự tin", "B. Tự lực", "C. Tự do", "D. Tự nhiên"],
+        correct: 1,
+        explanation: "Self-reliant = Tự lực - có khả năng tự lo liệu cho bản thân"
+      },
+      {
+        question: "If parents are 'strict', they are:",
+        options: ["A. Dễ tính", "B. Nghiêm khắc", "C. Vui vẻ", "D. Buồn bã"],
+        correct: 1,
+        explanation: "Strict = Nghiêm khắc - đòi hỏi tuân thủ quy tắc một cách chặt chẽ"
+      },
+      {
+        question: "An 'argument' is:",
+        options: ["A. Cuộc trò chuyện", "B. Cuộc tranh cãi", "C. Cuộc họp", "D. Cuộc thảo luận"],
+        correct: 1,
+        explanation: "Argument = Cuộc tranh cãi - sự bất đồng quan điểm gay gắt"
+      },
+      {
+        question: "To 'complain' means:",
+        options: ["A. Khen ngợi", "B. Than phiền", "C. Giải thích", "D. Hỏi han"],
+        correct: 1,
+        explanation: "Complain = Than phiền - bày tỏ sự không hài lòng"
+      },
+      {
+        question: "A 'relationship' is:",
+        options: ["A. Mối quan hệ", "B. Tình bạn", "C. Gia đình", "D. Tình yêu"],
+        correct: 0,
+        explanation: "Relationship = Mối quan hệ - sự kết nối giữa người với người"
+      },
+      {
+        question: "'Independent' means:",
+        options: ["A. Phụ thuộc", "B. Độc lập", "C. Tự do", "D. Riêng tư"],
+        correct: 1,
+        explanation: "Independent = Độc lập - không phụ thuộc vào người khác"
+      },
+      {
+        question: "'Technology' refers to:",
+        options: ["A. Khoa học", "B. Công nghệ", "C. Kỹ thuật", "D. Máy móc"],
+        correct: 1,
+        explanation: "Technology = Công nghệ - ứng dụng khoa học vào thực tiễn"
+      },
+      {
+        question: "Something 'old-fashioned' is:",
+        options: ["A. Hiện đại", "B. Lỗi thời", "C. Mới mẻ", "D. Phổ biến"],
+        correct: 1,
+        explanation: "Old-fashioned = Lỗi thời - thuộc về quá khứ, không còn phổ biến"
+      },
+      {
+        question: "A 'trend' is:",
+        options: ["A. Quy tắc", "B. Xu hướng", "C. Thói quen", "D. Truyền thống"],
+        correct: 1,
+        explanation: "Trend = Xu hướng - điều đang thịnh hành trong một thời kỳ"
+      },
+      {
+        question: "'Rules' are:",
+        options: ["A. Lời khuyên", "B. Quy tắc", "C. Ý kiến", "D. Đề nghị"],
+        correct: 1,
+        explanation: "Rules = Quy tắc - những nguyên tắc cần tuân theo"
+      },
+      {
+        question: "'Pocket money' is:",
+        options: ["A. Tiền lương", "B. Tiền tiêu vặt", "C. Tiền tiết kiệm", "D. Tiền thưởng"],
+        correct: 1,
+        explanation: "Pocket money = Tiền tiêu vặt - số tiền cho con để chi tiêu cá nhân"
+      },
+      {
+        question: "Someone 'reliable' is:",
+        options: ["A. Đáng tin cậy", "B. Đáng yêu", "C. Đáng sợ", "D. Đáng thương"],
+        correct: 0,
+        explanation: "Reliable = Đáng tin cậy - có thể tin tưởng và phụ thuộc vào"
+      },
+      {
+        question: "If you are 'worried', you feel:",
+        options: ["A. Vui vẻ", "B. Lo lắng", "C. Tức giận", "D. Buồn bã"],
+        correct: 1,
+        explanation: "Worried = Lo lắng - cảm thấy bất an về điều gì đó"
+      },
+      {
+        question: "'Therefore' means:",
+        options: ["A. Tuy nhiên", "B. Do đó", "C. Bởi vì", "D. Mặc dù"],
+        correct: 1,
+        explanation: "Therefore = Do đó - vì vậy, vì lý do đó"
+      },
+      {
+        question: "To 'argue' means:",
+        options: ["A. Đồng ý", "B. Tranh luận", "C. Thảo luận", "D. Trò chuyện"],
+        correct: 1,
+        explanation: "Argue = Tranh luận - bày tỏ ý kiến bất đồng"
+      },
+      {
+        question: "'Completely' means:",
+        options: ["A. Một phần", "B. Hoàn toàn", "C. Gần như", "D. Có thể"],
+        correct: 1,
+        explanation: "Completely = Hoàn toàn - một cách trọn vẹn, toàn bộ"
+      },
+      {
+        question: "An 'easy-going' person is:",
+        options: ["A. Khó tính", "B. Dễ tính", "C. Nghiêm khắc", "D. Cẩn thận"],
+        correct: 1,
+        explanation: "Easy-going = Dễ tính - thoải mái, không khắt khe"
+      },
+      {
+        question: "A 'generation' is:",
+        options: ["A. Gia đình", "B. Thế hệ", "C. Nhóm người", "D. Cộng đồng"],
+        correct: 1,
+        explanation: "Generation = Thế hệ - nhóm người sinh trong cùng thời kỳ"
+      },
+      {
+        question: "'Laundry' refers to:",
+        options: ["A. Nấu ăn", "B. Giặt giũ", "C. Dọn dẹp", "D. Mua sắm"],
+        correct: 1,
+        explanation: "Laundry = Giặt giũ - công việc giặt quần áo"
+      },
+      {
+        question: "'Manner' means:",
+        options: ["A. Cách nói", "B. Cách cư xử", "C. Cách nghĩ", "D. Cách học"],
+        correct: 1,
+        explanation: "Manner = Cách cư xử - phong cách ứng xử với người khác"
+      },
+      {
+        question: "To 'nag' means:",
+        options: ["A. Khen ngợi", "B. Càu nhàu", "C. Giúp đỡ", "D. Hỏi han"],
+        correct: 1,
+        explanation: "Nag = Càu nhàu - liên tục nhắc nhở một cách khó chịu"
+      },
+      {
+        question: "To 'rely' on someone means:",
+        options: ["A. Ghét", "B. Dựa vào", "C. Yêu", "D. Hiểu"],
+        correct: 1,
+        explanation: "Rely = Dựa vào - tin tưởng và phụ thuộc vào ai/cái gì"
+      },
+      {
+        question: "A 'dishwasher' is:",
+        options: ["A. Người rửa bát", "B. Máy rửa bát", "C. Bồn rửa", "D. Khăn lau"],
+        correct: 1,
+        explanation: "Dishwasher = Máy rửa bát - thiết bị tự động rửa chén đĩa"
+      },
+      {
+        question: "'Furniture' includes:",
+        options: ["A. Quần áo", "B. Đồ nội thất", "C. Đồ ăn", "D. Đồ chơi"],
+        correct: 1,
+        explanation: "Furniture = Đồ nội thất - bàn ghế và đồ dùng trong nhà"
+      },
+      {
+        question: "A 'sporting event' is:",
+        options: ["A. Buổi hòa nhạc", "B. Sự kiện thể thao", "C. Lễ hội", "D. Triển lãm"],
+        correct: 1,
+        explanation: "Sporting event = Sự kiện thể thao - cuộc thi đấu thể thao"
+      },
+      {
+        question: "To 'build robots' means:",
+        options: ["A. Mua robot", "B. Chế tạo robot", "C. Sửa robot", "D. Vẽ robot"],
+        correct: 1,
+        explanation: "Build robots = Chế tạo robot - tạo ra người máy"
+      },
+      {
+        question: "'Carry out' means:",
+        options: ["A. Mang ra", "B. Thực hiện", "C. Bỏ đi", "D. Giữ lại"],
+        correct: 1,
+        explanation: "Carry out = Thực hiện - tiến hành làm điều gì đó"
+      },
+      {
+        question: "Something 'difficult' is:",
+        options: ["A. Dễ dàng", "B. Khó khăn", "C. Đơn giản", "D. Phức tạp"],
+        correct: 1,
+        explanation: "Difficult = Khó khăn - không dễ dàng thực hiện"
+      },
+      {
+        question: "'Power' means:",
+        options: ["A. Sức mạnh", "B. Quyền lực", "C. Năng lượng", "D. Tất cả đều đúng"],
+        correct: 3,
+        explanation: "Power = Quyền lực - khả năng kiểm soát hoặc ảnh hưởng"
+      },
+      {
+        question: "'Fairly' means:",
+        options: ["A. Rất", "B. Khá", "C. Ít", "D. Không"],
+        correct: 1,
+        explanation: "Fairly = Khá - ở mức độ vừa phải"
+      },
+      {
+        question: "'Technological' relates to:",
+        options: ["A. Sinh học", "B. Công nghệ", "C. Hóa học", "D. Vật lý"],
+        correct: 1,
+        explanation: "Technological = Thuộc về công nghệ - liên quan đến kỹ thuật"
+      },
+      {
+        question: "A 'complaint' is:",
+        options: ["A. Lời khen", "B. Lời phàn nàn", "C. Lời hỏi", "D. Lời cảm ơn"],
+        correct: 1,
+        explanation: "Complaint = Lời phàn nàn - sự bày tỏ không hài lòng"
+      },
+      {
+        question: "A 'rug' is:",
+        options: ["A. Tấm thảm", "B. Cái ghế", "C. Cái bàn", "D. Cái giường"],
+        correct: 0,
+        explanation: "Rug = Tấm thảm - miếng vải trải sàn"
+      },
+      {
+        question: "To 'set' rules means:",
+        options: ["A. Phá vỡ quy tắc", "B. Đặt ra quy tắc", "C. Quên quy tắc", "D. Học quy tắc"],
+        correct: 1,
+        explanation: "Set = Đặt ra - thiết lập quy tắc hoặc mục tiêu"
+      },
+      {
+        question: "'Skating' is:",
+        options: ["A. Bơi lội", "B. Trượt băng/patin", "C. Chạy bộ", "D. Đạp xe"],
+        correct: 1,
+        explanation: "Skating = Trượt băng/patin - môn thể thao trượt trên băng hoặc đường"
+      },
+      {
+        question: "'Afterward' means:",
+        options: ["A. Trước đó", "B. Sau đó", "C. Trong lúc", "D. Ngay lập tức"],
+        correct: 1,
+        explanation: "Afterward = Sau đó - ở thời điểm sau một sự kiện"
+      },
+      {
+        question: "To 'complete' something means:",
+        options: ["A. Bắt đầu", "B. Hoàn thành", "C. Tiếp tục", "D. Dừng lại"],
+        correct: 1,
+        explanation: "Complete = Hoàn thành - làm xong hoặc đầy đủ"
+      },
+      {
+        question: "A 'nap' is:",
+        options: ["A. Giấc ngủ dài", "B. Giấc ngủ ngắn", "C. Thức giấc", "D. Mơ"],
+        correct: 1,
+        explanation: "Nap = Giấc ngủ ngắn - ngủ một chút trong ngày"
+      },
+      {
+        question: "'News' means:",
+        options: ["A. Tin cũ", "B. Tin tức", "C. Tin đồn", "D. Tin nhắn"],
+        correct: 1,
+        explanation: "News = Tin tức - thông tin về sự kiện hiện tại"
+      },
+      {
+        question: "'Powerless' means:",
+        options: ["A. Mạnh mẽ", "B. Bất lực", "C. Quyền lực", "D. Có khả năng"],
+        correct: 1,
+        explanation: "Powerless = Bất lực - không có khả năng làm gì"
+      },
+      {
+        question: "'Technologically' means:",
+        options: ["A. Về mặt khoa học", "B. Về mặt công nghệ", "C. Về mặt kỹ thuật", "D. B và C đều đúng"],
+        correct: 3,
+        explanation: "Technologically = Về mặt công nghệ - theo cách liên quan đến kỹ thuật"
+      },
+      {
+        question: "'Powerlessness' is the state of being:",
+        options: ["A. Mạnh mẽ", "B. Bất lực", "C. Tự tin", "D. Độc lập"],
+        correct: 1,
+        explanation: "Powerlessness = Sự bất lực - trạng thái không có quyền lực"
+      },
+      {
+        question: "To 'carry on' means:",
+        options: ["A. Dừng lại", "B. Tiếp tục", "C. Bắt đầu", "D. Kết thúc"],
+        correct: 1,
+        explanation: "Carry on = Tiếp tục - duy trì làm điều gì đó"
+      }
+    ];
+
+    const grammarQuestions = [
+      {
+        question: "1. My parents _____ to work every day.",
+        options: ["A. go", "B. goes", "C. going", "D. are going"],
+        correct: 0,
+        explanation: "Đáp án: A. go - Dùng Present Simple với chủ ngữ số nhiều 'parents' và trạng từ tần suất 'every day'."
+      },
+      {
+        question: "2. She _____ her homework right now.",
+        options: ["A. do", "B. does", "C. is doing", "D. doing"],
+        correct: 2,
+        explanation: "Đáp án: C. is doing - Dùng Present Continuous với 'right now' để diễn tả hành động đang xảy ra."
+      },
+      {
+        question: "3. I _____ what you mean.",
+        options: ["A. am understanding", "B. understand", "C. understanding", "D. understands"],
+        correct: 1,
+        explanation: "Đáp án: B. understand - 'Understand' là stative verb, không dùng ở thì tiếp diễn."
+      },
+      {
+        question: "4. The situation _____ complicated.",
+        options: ["A. seems", "B. is seeming", "C. seem", "D. seeming"],
+        correct: 0,
+        explanation: "Đáp án: A. seems - 'Seem' là linking verb, dùng Present Simple với chủ ngữ số ít."
+      },
+      {
+        question: "5. I want independence, _____ I need support.",
+        options: ["A. and", "B. but", "C. or", "D. so"],
+        correct: 1,
+        explanation: "Đáp án: B. but - Dùng 'but' để nối hai mệnh đề đối lập (muốn độc lập nhưng cần hỗ trợ)."
+      },
+      {
+        question: "6. Never _____ such a big generation gap.",
+        options: ["A. I have seen", "B. have I seen", "C. I seen", "D. seen I have"],
+        correct: 1,
+        explanation: "Đáp án: B. have I seen - Đảo ngữ với 'Never' đặt đầu câu: Never + trợ động từ + S + V."
+      },
+      {
+        question: "7. No sooner _____ home than I missed my family.",
+        options: ["A. I had left", "B. had I left", "C. I left", "D. left I"],
+        correct: 1,
+        explanation: "Đáp án: B. had I left - Đảo ngữ với 'No sooner': No sooner + had + S + V3 + than..."
+      },
+      {
+        question: "8. Water _____ at 100 degrees Celsius.",
+        options: ["A. boil", "B. boils", "C. is boiling", "D. boiling"],
+        correct: 1,
+        explanation: "Đáp án: B. boils - Dùng Present Simple để diễn tả sự thật hiển nhiên."
+      },
+      {
+        question: "9. They _____ to move out next month.",
+        options: ["A. plan", "B. plans", "C. are planning", "D. planned"],
+        correct: 2,
+        explanation: "Đáp án: C. are planning - Dùng Present Continuous để diễn tả kế hoạch tương lai gần."
+      },
+      {
+        question: "10. This cake _____ delicious!",
+        options: ["A. tastes", "B. is tasting", "C. taste", "D. tasting"],
+        correct: 0,
+        explanation: "Đáp án: A. tastes - 'Taste' là linking verb khi diễn tả cảm giác, dùng Present Simple."
+      },
+      {
+        question: "11. She _____ three languages fluently.",
+        options: ["A. speak", "B. speaks", "C. is speaking", "D. speaking"],
+        correct: 1,
+        explanation: "Đáp án: B. speaks - Dùng Present Simple với chủ ngữ số ít 'she' để diễn tả khả năng."
+      },
+      {
+        question: "12. I _____ to the gym every Monday.",
+        options: ["A. go", "B. goes", "C. am going", "D. going"],
+        correct: 0,
+        explanation: "Đáp án: A. go - Dùng Present Simple với 'every Monday' để diễn tả thói quen."
+      },
+      {
+        question: "13. He _____ his independence now.",
+        options: ["A. enjoy", "B. enjoys", "C. is enjoying", "D. enjoying"],
+        correct: 2,
+        explanation: "Đáp án: C. is enjoying - Dùng Present Continuous với 'now' để diễn tả hành động đang xảy ra."
+      },
+      {
+        question: "14. The book _____ to my sister.",
+        options: ["A. belong", "B. belongs", "C. is belonging", "D. belonging"],
+        correct: 1,
+        explanation: "Đáp án: B. belongs - 'Belong' là stative verb, không dùng ở thì tiếp diễn."
+      },
+      {
+        question: "15. Rarely _____ agree on everything.",
+        options: ["A. we do", "B. do we", "C. we", "D. does we"],
+        correct: 1,
+        explanation: "Đáp án: B. do we - Đảo ngữ với 'Rarely' đặt đầu câu: Rarely + do/does + S + V."
+      },
+      {
+        question: "16. I studied hard, _____ I passed the exam.",
+        options: ["A. but", "B. or", "C. so", "D. yet"],
+        correct: 2,
+        explanation: "Đáp án: C. so - Dùng 'so' để nối hai mệnh đề có quan hệ nguyên nhân - kết quả."
+      },
+      {
+        question: "17. She _____ tired after work.",
+        options: ["A. feel", "B. feels", "C. is feeling", "D. feeling"],
+        correct: 1,
+        explanation: "Đáp án: B. feels - 'Feel' là linking verb, dùng Present Simple với chủ ngữ số ít."
+      },
+      {
+        question: "18. At no time _____ give up.",
+        options: ["A. I did", "B. did I", "C. I", "D. do I"],
+        correct: 1,
+        explanation: "Đáp án: B. did I - Đảo ngữ với 'At no time': At no time + trợ động từ + S + V."
+      },
+      {
+        question: "19. The sun _____ in the east.",
+        options: ["A. rise", "B. rises", "C. is rising", "D. rising"],
+        correct: 1,
+        explanation: "Đáp án: B. rises - Dùng Present Simple để diễn tả sự thật hiển nhiên."
+      },
+      {
+        question: "20. We _____ a party this weekend.",
+        options: ["A. have", "B. has", "C. are having", "D. having"],
+        correct: 2,
+        explanation: "Đáp án: C. are having - Dùng Present Continuous để diễn tả kế hoạch tương lai gần."
+      },
+      {
+        question: "21. I _____ you're right about this.",
+        options: ["A. am thinking", "B. think", "C. thinking", "D. thinks"],
+        correct: 1,
+        explanation: "Đáp án: B. think - 'Think' (nghĩ rằng/cho rằng) là stative verb, không dùng ở thì tiếp diễn."
+      },
+      {
+        question: "22. She looks _____ today.",
+        options: ["A. happily", "B. happiness", "C. happy", "D. happier"],
+        correct: 2,
+        explanation: "Đáp án: C. happy - Sau linking verb 'look' dùng tính từ, không dùng trạng từ."
+      },
+      {
+        question: "23. Seldom _____ late for school.",
+        options: ["A. he is", "B. is he", "C. he", "D. does he"],
+        correct: 1,
+        explanation: "Đáp án: B. is he - Đảo ngữ với 'Seldom' đặt đầu câu: Seldom + be/trợ động từ + S + V."
+      },
+      {
+        question: "24. I'm tired, _____ I'm going to bed.",
+        options: ["A. but", "B. and", "C. so", "D. or"],
+        correct: 2,
+        explanation: "Đáp án: C. so - Dùng 'so' để nối hai mệnh đề có quan hệ nguyên nhân - kết quả."
+      },
+      {
+        question: "25. The movie _____ at 7 PM tonight.",
+        options: ["A. start", "B. starts", "C. is starting", "D. starting"],
+        correct: 1,
+        explanation: "Đáp án: B. starts - Dùng Present Simple để diễn tả lịch trình cố định."
+      },
+      {
+        question: "26. She _____ a new car.",
+        options: ["A. own", "B. owns", "C. is owning", "D. owning"],
+        correct: 1,
+        explanation: "Đáp án: B. owns - 'Own' là stative verb, không dùng ở thì tiếp diễn."
+      },
+      {
+        question: "27. Under no circumstances _____ your dreams.",
+        options: ["A. you should give up", "B. should you give up", "C. you give up", "D. give up you"],
+        correct: 1,
+        explanation: "Đáp án: B. should you give up - Đảo ngữ với 'Under no circumstances': Under no circumstances + trợ động từ + S + V."
+      },
+      {
+        question: "28. He _____ more mature every day.",
+        options: ["A. become", "B. becomes", "C. is becoming", "D. becoming"],
+        correct: 2,
+        explanation: "Đáp án: C. is becoming - Dùng Present Continuous để diễn tả sự thay đổi dần dần."
+      },
+      {
+        question: "29. I like coffee, _____ I prefer tea.",
+        options: ["A. and", "B. but", "C. or", "D. so"],
+        correct: 1,
+        explanation: "Đáp án: B. but - Dùng 'but' để nối hai mệnh đề đối lập (thích cà phê nhưng thích trà hơn)."
+      },
+      {
+        question: "30. Little _____ about the consequences.",
+        options: ["A. he knew", "B. did he know", "C. he knows", "D. does he know"],
+        correct: 1,
+        explanation: "Đáp án: B. did he know - Đảo ngữ với 'Little' đặt đầu câu: Little + trợ động từ + S + V."
+      }
+    ];
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        if (data.length > 0) {
+          userProgress = data[0];
+          updateAllProgress();
+        }
+      }
+    };
+
+    async function initDataSdk() {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error("Failed to initialize data SDK");
+        }
+      }
+    }
+
+    async function saveProgress() {
+      if (!window.dataSdk) return;
+      
+      const vocabProgress = Math.round(((currentCardIndex + 1) / vocabularyCards.length) * 100);
+      const readingProgress = Object.keys(readingAnswers).length > 0 ? 
+        Math.round((Object.keys(readingAnswers).length / readingQuestions.length) * 100) : 0;
+      const grammarProgress = Object.keys(grammarAnswers).length > 0 ?
+        Math.round((Object.keys(grammarAnswers).length / grammarQuestions.length) * 100) : 0;
+      const totalProgress = Math.round((vocabProgress + readingProgress + grammarProgress) / 3);
+
+      const progressData = {
+        id: "user_progress",
+        vocabulary_progress: vocabProgress,
+        reading_progress: readingProgress,
+        grammar_progress: grammarProgress,
+        total_progress: totalProgress,
+        completed_vocab_cards: currentCardIndex + 1,
+        reading_score: 0,
+        grammar_score: 0,
+        last_updated: new Date().toISOString()
+      };
+
+      if (userProgress) {
+        const result = await window.dataSdk.update({ ...progressData, __backendId: userProgress.__backendId });
+        if (!result.isOk) {
+          showToast("Không thể lưu tiến độ");
+        }
+      } else {
+        const result = await window.dataSdk.create(progressData);
+        if (!result.isOk) {
+          showToast("Không thể lưu tiến độ");
+        }
+      }
+    }
+
+    function updateAllProgress() {
+      if (!userProgress) return;
+
+      updateProgressCircle('total-progress', userProgress.total_progress || 0);
+      updateProgressCircle('vocab-progress', userProgress.vocabulary_progress || 0);
+      updateProgressCircle('reading-progress', userProgress.reading_progress || 0);
+      updateProgressCircle('grammar-progress', userProgress.grammar_progress || 0);
+    }
+
+    function updateProgressCircle(id, percentage) {
+      const circle = document.getElementById(`${id}-ring`);
+      const text = document.getElementById(`${id}-text`);
+      const circumference = 2 * Math.PI * 52;
+      const offset = circumference - (percentage / 100) * circumference;
+      
+      circle.style.strokeDashoffset = offset;
+      text.textContent = `${percentage}%`;
+    }
+
+    // Element SDK
+    async function onConfigChange(config) {
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
+
+      document.body.style.background = `linear-gradient(135deg, ${bgColor} 0%, ${surfaceColor} 100%)`;
+      document.body.style.color = textColor;
+
+      document.querySelector('header').style.color = textColor;
+      
+      const progressBoxes = document.querySelectorAll('.rounded-xl.p-4, .rounded-xl.p-6');
+      progressBoxes.forEach(box => {
+        box.style.backgroundColor = surfaceColor;
+        box.style.color = textColor;
+      });
+
+      document.querySelectorAll('.progress-ring-circle').forEach(circle => {
+        circle.style.stroke = primaryColor;
+      });
+
+      const tabs = document.querySelectorAll('.tab-button');
+      tabs.forEach(tab => {
+        tab.style.backgroundColor = surfaceColor;
+        tab.style.color = textColor;
+        if (tab.classList.contains('active')) {
+          tab.style.backgroundColor = primaryColor;
+          tab.style.color = 'white';
+        }
+      });
+
+      document.querySelectorAll('.flashcard-front').forEach(el => {
+        el.style.background = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+      });
+
+      document.querySelectorAll('.flashcard-back').forEach(el => {
+        el.style.background = `linear-gradient(135deg, ${secondaryColor} 0%, ${primaryColor} 100%)`;
+      });
+
+      document.getElementById('vocab-progress-bar').style.backgroundColor = primaryColor;
+
+      document.querySelectorAll('.control-button').forEach(btn => {
+        btn.style.backgroundColor = primaryColor;
+        btn.style.color = 'white';
+      });
+
+      document.getElementById('unit-title').textContent = config.unit_title || defaultConfig.unit_title;
+      document.getElementById('total-progress-label').textContent = config.total_progress_label || defaultConfig.total_progress_label;
+      document.getElementById('vocab-progress-label').textContent = config.vocab_progress_label || defaultConfig.vocab_progress_label;
+      document.getElementById('reading-progress-label').textContent = config.reading_progress_label || defaultConfig.reading_progress_label;
+      document.getElementById('grammar-progress-label').textContent = config.grammar_progress_label || defaultConfig.grammar_progress_label;
+      document.getElementById('vocabulary-tab-text').textContent = config.vocabulary_tab || defaultConfig.vocabulary_tab;
+      document.getElementById('reading-tab-text').textContent = config.reading_tab || defaultConfig.reading_tab;
+      document.getElementById('grammar-tab-text').textContent = config.grammar_tab || defaultConfig.grammar_tab;
+      document.getElementById('home-button-text').textContent = config.home_button || defaultConfig.home_button;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
             {
-                word: "rug",
-                type: "(n)",
-                ipa: "/rʌɡ/",
-                meaning: "thảm nhỏ",
-                example: "There's a beautiful rug in the living room."
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
             },
             {
-                word: "rules",
-                type: "(n)",
-                ipa: "/ruːlz/",
-                meaning: "quy tắc, luật lệ",
-                example: "Every family has their own rules."
+              get: () => config.surface_color || defaultConfig.surface_color,
+              set: (value) => {
+                config.surface_color = value;
+                window.elementSdk.setConfig({ surface_color: value });
+              }
             },
             {
-                word: "set",
-                type: "(v)",
-                ipa: "/set/",
-                meaning: "đặt, thiết lập",
-                example: "Parents set rules for their children."
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              }
             },
             {
-                word: "skating",
-                type: "(n)",
-                ipa: "/ˈskeɪtɪŋ/",
-                meaning: "trượt băng/patin",
-                example: "Ice skating is a popular winter sport."
+              get: () => config.primary_action_color || defaultConfig.primary_action_color,
+              set: (value) => {
+                config.primary_action_color = value;
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
             },
             {
-                word: "sporting event",
-                type: "(n)",
-                ipa: "/ˈspɔːtɪŋ ɪˈvent/",
-                meaning: "sự kiện thể thao",
-                example: "The Olympics is the biggest sporting event."
-            },
-            {
-                word: "strict",
-                type: "(adj)",
-                ipa: "/strɪkt/",
-                meaning: "nghiêm khắc",
-                example: "My parents are strict about homework."
-            },
-            {
-                word: "technology",
-                type: "(n)",
-                ipa: "/tekˈnɒlədʒi/",
-                meaning: "công nghệ",
-                example: "Technology changes our daily lives."
-            },
-            {
-                word: "technological",
-                type: "(adj)",
-                ipa: "/ˌteknəˈlɒdʒɪkəl/",
-                meaning: "thuộc về công nghệ",
-                example: "We live in a technological age."
-            },
-            {
-                word: "technologically",
-                type: "(adv)",
-                ipa: "/ˌteknəˈlɒdʒɪkli/",
-                meaning: "về mặt công nghệ",
-                example: "The country is technologically advanced."
-            },
-            {
-                word: "teenager",
-                type: "(n)",
-                ipa: "/ˈtiːneɪdʒə/",
-                meaning: "thiếu niên",
-                example: "Being a teenager can be challenging."
-            },
-            {
-                word: "therefore",
-                type: "(adv)",
-                ipa: "/ˈðeəfɔː/",
-                meaning: "do đó, vì vậy",
-                example: "It's raining, therefore we'll stay inside."
-            },
-            {
-                word: "trend",
-                type: "(n)",
-                ipa: "/trend/",
-                meaning: "xu hướng",
-                example: "Social media is a modern trend."
-            },
-            {
-                word: "afterward",
-                type: "(adv)",
-                ipa: "/ˈɑːftəwəd/",
-                meaning: "sau đó",
-                example: "We had dinner and went to the movies afterward."
-            },
-            {
-                word: "argument",
-                type: "(n)",
-                ipa: "/ˈɑːɡjumənt/",
-                meaning: "cuộc tranh cãi",
-                example: "They had an argument about money."
-            },
-            {
-                word: "argue",
-                type: "(v)",
-                ipa: "/ˈɑːɡjuː/",
-                meaning: "tranh cãi",
-                example: "Don't argue with your parents."
-            },
-            {
-                word: "build robots",
-                type: "(v phrase)",
-                ipa: "/bɪld ˈrəʊbɒts/",
-                meaning: "chế tạo robot",
-                example: "Students learn to build robots in technology class."
-            },
-            {
-                word: "complain",
-                type: "(v)",
-                ipa: "/kəmˈpleɪn/",
-                meaning: "phàn nàn",
-                example: "She always complains about the weather."
-            },
-            {
-                word: "complaint",
-                type: "(n)",
-                ipa: "/kəmˈpleɪnt/",
-                meaning: "lời phàn nàn",
-                example: "The manager received many complaints."
-            },
-            {
-                word: "complete",
-                type: "(v/adj)",
-                ipa: "/kəmˈpliːt/",
-                meaning: "hoàn thành, hoàn chỉnh",
-                example: "Please complete your homework."
-            },
-            {
-                word: "completely",
-                type: "(adv)",
-                ipa: "/kəmˈpliːtli/",
-                meaning: "hoàn toàn",
-                example: "I completely agree with you."
-            },
-            {
-                word: "dishwasher",
-                type: "(n)",
-                ipa: "/ˈdɪʃwɒʃə/",
-                meaning: "máy rửa bát",
-                example: "The dishwasher saves us time."
-            },
-            {
-                word: "easy-going",
-                type: "(adj)",
-                ipa: "/ˌiːzi ˈɡəʊɪŋ/",
-                meaning: "dễ tính, thoải mái",
-                example: "My dad is very easy-going."
-            },
-            {
-                word: "fairly",
-                type: "(adv)",
-                ipa: "/ˈfeəli/",
-                meaning: "khá, tương đối",
-                example: "The test was fairly difficult."
-            },
-            {
-                word: "furniture",
-                type: "(n)",
-                ipa: "/ˈfɜːnɪtʃə/",
-                meaning: "đồ nội thất",
-                example: "We bought new furniture for the house."
-            },
-            {
-                word: "generation",
-                type: "(n)",
-                ipa: "/ˌdʒenəˈreɪʃən/",
-                meaning: "thế hệ",
-                example: "Each generation has different values."
-            },
-            {
-                word: "generation gap",
-                type: "(n)",
-                ipa: "/ˌdʒenəˈreɪʃən ɡæp/",
-                meaning: "khoảng cách thế hệ",
-                example: "The generation gap causes misunderstandings."
-            },
-            {
-                word: "independence",
-                type: "(n)",
-                ipa: "/ˌɪndɪˈpendəns/",
-                meaning: "sự độc lập",
-                example: "Young people value their independence."
-            },
-            {
-                word: "independent",
-                type: "(adj)",
-                ipa: "/ˌɪndɪˈpendənt/",
-                meaning: "độc lập",
-                example: "She wants to be independent."
-            },
-            {
-                word: "laundry",
-                type: "(n)",
-                ipa: "/ˈlɔːndri/",
-                meaning: "việc giặt giũ",
-                example: "I need to do the laundry today."
-            },
-            {
-                word: "manner",
-                type: "(n)",
-                ipa: "/ˈmænə/",
-                meaning: "cách cư xử, phép lịch sự",
-                example: "Good manners are important in society."
-            },
-            {
-                word: "nag",
-                type: "(v)",
-                ipa: "/næɡ/",
-                meaning: "cằn nhằn",
-                example: "Don't nag me about cleaning my room."
-            },
-            {
-                word: "nap",
-                type: "(n/v)",
-                ipa: "/næp/",
-                meaning: "giấc ngủ trưa",
-                example: "I like to take a nap after lunch."
-            },
-            {
-                word: "news",
-                type: "(n)",
-                ipa: "/njuːz/",
-                meaning: "tin tức",
-                example: "Did you watch the news last night?"
-            },
-            {
-                word: "old-fashioned",
-                type: "(adj)",
-                ipa: "/ˌəʊld ˈfæʃənd/",
-                meaning: "lỗi thời, cổ hủ",
-                example: "My grandparents have old-fashioned ideas."
-            },
-            {
-                word: "pocket money",
-                type: "(n)",
-                ipa: "/ˈpɒkɪt ˌmʌni/",
-                meaning: "tiền tiêu vặt",
-                example: "Children receive pocket money from parents."
-            },
-            {
-                word: "powerless",
-                type: "(adj)",
-                ipa: "/ˈpaʊələs/",
-                meaning: "bất lực",
-                example: "I felt powerless to help him."
-            },
-            {
-                word: "powerlessness",
-                type: "(n)",
-                ipa: "/ˈpaʊələsnəs/",
-                meaning: "sự bất lực",
-                example: "The feeling of powerlessness is frustrating."
-            },
-            {
-                word: "reliable",
-                type: "(adj)",
-                ipa: "/rɪˈlaɪəbl/",
-                meaning: "đáng tin cậy",
-                example: "He is a reliable friend."
-            },
-            {
-                word: "difficult",
-                type: "(adj)",
-                ipa: "/ˈdɪfɪkəlt/",
-                meaning: "khó khăn",
-                example: "Learning a new language is difficult."
-            },
-            {
-                word: "self-reliant",
-                type: "(adj)",
-                ipa: "/ˌself rɪˈlaɪənt/",
-                meaning: "tự lực cánh sinh",
-                example: "Independent people are self-reliant."
-            },
-            {
-                word: "worried",
-                type: "(adj)",
-                ipa: "/ˈwʌrid/",
-                meaning: "lo lắng",
-                example: "Parents are worried about their children."
-            },
-            {
-                word: "power",
-                type: "(n)",
-                ipa: "/ˈpaʊə/",
-                meaning: "quyền lực, sức mạnh",
-                example: "Knowledge gives you power."
-            },
-            {
-                word: "relationship",
-                type: "(n)",
-                ipa: "/rɪˈleɪʃənʃɪp/",
-                meaning: "mối quan hệ",
-                example: "Family relationships are important."
-            },
-            {
-                word: "rely",
-                type: "(v)",
-                ipa: "/rɪˈlaɪ/",
-                meaning: "dựa vào, tin cậy",
-                example: "You can rely on me for help."
-            },
-            {
-                word: "carry on",
-                type: "(phrasal v)",
-                ipa: "/ˈkæri ɒn/",
-                meaning: "tiếp tục",
-                example: "Please carry on with your work."
-            },
-            {
-                word: "carry out",
-                type: "(phrasal v)",
-                ipa: "/ˈkæri aʊt/",
-                meaning: "thực hiện",
-                example: "We need to carry out this plan."
+              get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+              set: (value) => {
+                config.secondary_action_color = value;
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
             }
-        ];
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["unit_title", config.unit_title || defaultConfig.unit_title],
+          ["total_progress_label", config.total_progress_label || defaultConfig.total_progress_label],
+          ["vocab_progress_label", config.vocab_progress_label || defaultConfig.vocab_progress_label],
+          ["reading_progress_label", config.reading_progress_label || defaultConfig.reading_progress_label],
+          ["grammar_progress_label", config.grammar_progress_label || defaultConfig.grammar_progress_label],
+          ["vocabulary_tab", config.vocabulary_tab || defaultConfig.vocabulary_tab],
+          ["reading_tab", config.reading_tab || defaultConfig.reading_tab],
+          ["grammar_tab", config.grammar_tab || defaultConfig.grammar_tab],
+          ["home_button", config.home_button || defaultConfig.home_button]
+        ])
+      });
+    }
 
-        // Complete vocabulary quiz with all 44 words
-        const vocabularyQuestions = [
-            {
-                question: "What does 'rug' mean?",
-                options: ["thảm lớn", "thảm nhỏ", "gối", "chăn"],
-                correct: 1
-            },
-            {
-                question: "Choose the correct meaning of 'rules':",
-                options: ["trò chơi", "quy tắc", "công cụ", "bài học"],
-                correct: 1
-            },
-            {
-                question: "What does 'set' mean?",
-                options: ["lấy", "đặt, thiết lập", "ném", "mua"],
-                correct: 1
-            },
-            {
-                question: "'Skating' refers to:",
-                options: ["bơi lội", "trượt băng/patin", "chạy bộ", "đạp xe"],
-                correct: 1
-            },
-            {
-                question: "What is a 'sporting event'?",
-                options: ["buổi học", "sự kiện thể thao", "buổi tiệc", "cuộc họp"],
-                correct: 1
-            },
-            {
-                question: "What does 'strict' mean?",
-                options: ["dễ tính", "nghiêm khắc", "vui vẻ", "buồn bã"],
-                correct: 1
-            },
-            {
-                question: "'Technology' means:",
-                options: ["sinh học", "công nghệ", "địa lý", "lịch sử"],
-                correct: 1
-            },
-            {
-                question: "What is 'technological'?",
-                options: ["thuộc về khoa học", "thuộc về công nghệ", "thuộc về toán học", "thuộc về văn học"],
-                correct: 1
-            },
-            {
-                question: "'Technologically' means:",
-                options: ["về mặt khoa học", "về mặt công nghệ", "về mặt xã hội", "về mặt kinh tế"],
-                correct: 1
-            },
-            {
-                question: "A 'teenager' is:",
-                options: ["trẻ em", "thiếu niên", "người già", "người trưởng thành"],
-                correct: 1
-            },
-            {
-                question: "What does 'therefore' mean?",
-                options: ["tuy nhiên", "do đó", "bởi vì", "mặc dù"],
-                correct: 1
-            },
-            {
-                question: "What is a 'trend'?",
-                options: ["xu hướng", "vấn đề", "giải pháp", "khó khăn"],
-                correct: 0
-            },
-            {
-                question: "'Afterward' means:",
-                options: ["trước đó", "sau đó", "trong lúc đó", "ngay lập tức"],
-                correct: 1
-            },
-            {
-                question: "What is an 'argument'?",
-                options: ["cuộc trò chuyện", "cuộc tranh cãi", "cuộc họp", "cuộc thi"],
-                correct: 1
-            },
-            {
-                question: "What does 'argue' mean?",
-                options: ["đồng ý", "tranh cãi", "im lặng", "cười"],
-                correct: 1
-            },
-            {
-                question: "'Build robots' means:",
-                options: ["mua robot", "chế tạo robot", "sửa robot", "bán robot"],
-                correct: 1
-            },
-            {
-                question: "What does 'complain' mean?",
-                options: ["khen ngợi", "phàn nàn", "đồng ý", "giúp đỡ"],
-                correct: 1
-            },
-            {
-                question: "A 'complaint' is:",
-                options: ["lời khen", "lời phàn nàn", "lời cảm ơn", "lời xin lỗi"],
-                correct: 1
-            },
-            {
-                question: "'Complete' means:",
-                options: ["bắt đầu", "hoàn thành", "dừng lại", "tiếp tục"],
-                correct: 1
-            },
-            {
-                question: "'Completely' means:",
-                options: ["một phần", "hoàn toàn", "hầu như", "ít nhiều"],
-                correct: 1
-            },
-            {
-                question: "A 'dishwasher' is:",
-                options: ["người rửa bát", "máy rửa bát", "bồn rửa", "khăn lau"],
-                correct: 1
-            },
-            {
-                question: "'Easy-going' means:",
-                options: ["khó tính", "dễ tính", "nghiêm khắc", "lo lắng"],
-                correct: 1
-            },
-            {
-                question: "What does 'fairly' mean?",
-                options: ["rất", "khá, tương đối", "ít", "không"],
-                correct: 1
-            },
-            {
-                question: "'Furniture' includes:",
-                options: ["quần áo", "đồ nội thất", "thức ăn", "sách vở"],
-                correct: 1
-            },
-            {
-                question: "A 'generation' is:",
-                options: ["một năm", "thế hệ", "một tháng", "một tuần"],
-                correct: 1
-            },
-            {
-                question: "'Generation gap' means:",
-                options: ["thế hệ mới", "khoảng cách thế hệ", "người già", "trẻ em"],
-                correct: 1
-            },
-            {
-                question: "'Independence' means:",
-                options: ["sự phụ thuộc", "sự độc lập", "sự yếu đuối", "sự lo lắng"],
-                correct: 1
-            },
-            {
-                question: "'Independent' means:",
-                options: ["phụ thuộc", "độc lập", "yếu đuối", "lo lắng"],
-                correct: 1
-            },
-            {
-                question: "What is 'laundry'?",
-                options: ["việc nấu ăn", "việc giặt giũ", "việc dọn dẹp", "việc mua sắm"],
-                correct: 1
-            },
-            {
-                question: "'Manner' refers to:",
-                options: ["cách cư xử", "quần áo", "thức ăn", "nhà cửa"],
-                correct: 0
-            },
-            {
-                question: "What does 'nag' mean?",
-                options: ["khen ngợi", "cằn nhằn", "giúp đỡ", "yêu thương"],
-                correct: 1
-            },
-            {
-                question: "A 'nap' is:",
-                options: ["bữa ăn", "giấc ngủ trưa", "bài tập", "trò chơi"],
-                correct: 1
-            },
-            {
-                question: "'News' means:",
-                options: ["truyện", "tin tức", "bài hát", "phim"],
-                correct: 1
-            },
-            {
-                question: "'Old-fashioned' means:",
-                options: ["thời trang mới", "lỗi thời", "đẹp", "xấu"],
-                correct: 1
-            },
-            {
-                question: "'Pocket money' is:",
-                options: ["tiền lương", "tiền tiêu vặt", "tiền tiết kiệm", "tiền thuê"],
-                correct: 1
-            },
-            {
-                question: "'Powerless' means:",
-                options: ["mạnh mẽ", "bất lực", "thông minh", "nhanh nhẹn"],
-                correct: 1
-            },
-            {
-                question: "'Powerlessness' is:",
-                options: ["sức mạnh", "sự bất lực", "trí thông minh", "sự nhanh nhẹn"],
-                correct: 1
-            },
-            {
-                question: "'Reliable' means:",
-                options: ["không tin được", "đáng tin cậy", "khó khăn", "dễ dàng"],
-                correct: 1
-            },
-            {
-                question: "'Difficult' means:",
-                options: ["dễ dàng", "khó khăn", "thú vị", "nhàm chán"],
-                correct: 1
-            },
-            {
-                question: "'Self-reliant' means:",
-                options: ["phụ thuộc người khác", "tự lực cánh sinh", "yếu đuối", "lo lắng"],
-                correct: 1
-            },
-            {
-                question: "'Worried' means:",
-                options: ["vui vẻ", "lo lắng", "tức giận", "bình tĩnh"],
-                correct: 1
-            },
-            {
-                question: "'Power' means:",
-                options: ["sự yếu đuối", "quyền lực, sức mạnh", "sự nghèo khó", "sự bệnh tật"],
-                correct: 1
-            },
-            {
-                question: "A 'relationship' is:",
-                options: ["công việc", "mối quan hệ", "sở thích", "bài học"],
-                correct: 1
-            },
-            {
-                question: "What does 'rely' mean?",
-                options: ["từ chối", "dựa vào", "tránh xa", "quên đi"],
-                correct: 1
-            },
-            {
-                question: "'Carry on' means:",
-                options: ["dừng lại", "tiếp tục", "bắt đầu", "kết thúc"],
-                correct: 1
-            },
-            {
-                question: "'Carry out' means:",
-                options: ["mang ra ngoài", "thực hiện", "mang vào", "bỏ đi"],
-                correct: 1
+    // Text-to-Speech functionality
+    function speakWord(word) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8;
+        utterance.pitch = 1;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    // Flashcard functionality
+    function updateFlashcard() {
+      const card = vocabularyCards[currentCardIndex];
+      const flashcard = document.getElementById('flashcard-container');
+      flashcard.classList.remove('flipped');
+      
+      document.getElementById('card-word').textContent = card.word;
+      document.getElementById('card-word-back').textContent = card.word;
+      document.getElementById('card-phonetic-front').textContent = card.phonetic;
+      document.getElementById('card-type-front').textContent = card.type;
+      document.getElementById('card-definition').textContent = card.definition;
+      document.getElementById('card-example').textContent = `Example: ${card.example}`;
+      
+      document.getElementById('card-counter').textContent = `${currentCardIndex + 1} / ${vocabularyCards.length}`;
+      const progress = ((currentCardIndex + 1) / vocabularyCards.length) * 100;
+      document.getElementById('vocab-progress-bar').style.width = `${progress}%`;
+      
+      document.getElementById('prev-btn').disabled = currentCardIndex === 0;
+      document.getElementById('next-btn').disabled = currentCardIndex === vocabularyCards.length - 1;
+      
+      // Auto-pronounce the word
+      speakWord(card.word);
+    }
+
+    // Vocabulary Test functionality
+    function updateVocabularyTest() {
+      const question = vocabularyTestQuestions[currentTestIndex];
+      const userAnswer = vocabularyTestAnswers[currentTestIndex];
+      
+      document.getElementById('test-question').textContent = question.question;
+      document.getElementById('test-counter').textContent = `${currentTestIndex + 1} / ${vocabularyTestQuestions.length}`;
+      
+      const progress = ((currentTestIndex + 1) / vocabularyTestQuestions.length) * 100;
+      document.getElementById('test-progress-bar').style.width = `${progress}%`;
+      
+      const optionsContainer = document.getElementById('test-options');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'quiz-option p-4 rounded-lg border-2 border-gray-300 cursor-pointer transition-all';
+        optionDiv.textContent = option;
+        optionDiv.dataset.index = index;
+        
+        if (userAnswer !== undefined) {
+          optionDiv.style.pointerEvents = 'none';
+          if (index === question.correct) {
+            optionDiv.classList.add('correct');
+          } else if (index === userAnswer) {
+            optionDiv.classList.add('incorrect');
+          }
+        } else {
+          optionDiv.addEventListener('click', function() {
+            selectTestAnswer(index);
+          });
+        }
+        
+        optionsContainer.appendChild(optionDiv);
+      });
+      
+      const feedbackDiv = document.getElementById('test-feedback');
+      if (userAnswer !== undefined) {
+        const isCorrect = userAnswer === question.correct;
+        feedbackDiv.classList.remove('hidden');
+        
+        document.getElementById('feedback-icon').textContent = isCorrect ? '✅' : '❌';
+        document.getElementById('feedback-text').textContent = isCorrect ? 'Chính xác!' : 'Chưa đúng!';
+        document.getElementById('feedback-explanation').textContent = question.explanation;
+        
+        if (isCorrect) {
+          playCorrectSound();
+        } else {
+          playIncorrectSound();
+        }
+      } else {
+        feedbackDiv.classList.add('hidden');
+      }
+      
+      document.getElementById('test-prev-btn').disabled = currentTestIndex === 0;
+      document.getElementById('test-next-btn').disabled = currentTestIndex === vocabularyTestQuestions.length - 1;
+    }
+
+    function selectTestAnswer(answerIndex) {
+      vocabularyTestAnswers[currentTestIndex] = answerIndex;
+      updateVocabularyTest();
+      saveProgress();
+    }
+
+    document.getElementById('flashcard-container').addEventListener('click', function() {
+      this.classList.toggle('flipped');
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', function() {
+      if (currentCardIndex > 0) {
+        currentCardIndex--;
+        updateFlashcard();
+      }
+    });
+
+    document.getElementById('next-btn').addEventListener('click', async function() {
+      if (currentCardIndex < vocabularyCards.length - 1) {
+        currentCardIndex++;
+        updateFlashcard();
+        await saveProgress();
+      }
+    });
+
+    // Vocabulary test navigation
+    document.getElementById('test-prev-btn').addEventListener('click', function() {
+      if (currentTestIndex > 0) {
+        currentTestIndex--;
+        updateVocabularyTest();
+      }
+    });
+
+    document.getElementById('test-next-btn').addEventListener('click', function() {
+      if (currentTestIndex < vocabularyTestQuestions.length - 1) {
+        currentTestIndex++;
+        updateVocabularyTest();
+      }
+    });
+
+    // Sub-tab switching for vocabulary section
+    document.getElementById('flashcard-subtab').addEventListener('click', function() {
+      document.getElementById('flashcard-subtab').classList.add('active');
+      document.getElementById('test-subtab').classList.remove('active');
+      document.getElementById('flashcard-content').classList.remove('hidden');
+      document.getElementById('test-content').classList.add('hidden');
+      
+      if (window.elementSdk && window.elementSdk.config) {
+        onConfigChange(window.elementSdk.config);
+      }
+    });
+
+    document.getElementById('test-subtab').addEventListener('click', function() {
+      document.getElementById('test-subtab').classList.add('active');
+      document.getElementById('flashcard-subtab').classList.remove('active');
+      document.getElementById('test-content').classList.remove('hidden');
+      document.getElementById('flashcard-content').classList.add('hidden');
+      updateVocabularyTest();
+      
+      if (window.elementSdk && window.elementSdk.config) {
+        onConfigChange(window.elementSdk.config);
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      const activeSection = document.querySelector('#vocab-section:not(.hidden)');
+      if (!activeSection) return;
+
+      if (e.key === 'ArrowLeft' && currentCardIndex > 0) {
+        currentCardIndex--;
+        updateFlashcard();
+      } else if (e.key === 'ArrowRight' && currentCardIndex < vocabularyCards.length - 1) {
+        currentCardIndex++;
+        updateFlashcard();
+        saveProgress();
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        document.getElementById('flashcard-container').classList.toggle('flipped');
+      }
+    });
+
+    // Tab switching
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      document.getElementById('vocab-section').classList.add('hidden');
+      document.getElementById('stereotypes-section').classList.add('hidden');
+      document.getElementById('reading-section').classList.add('hidden');
+      document.getElementById('grammar-section').classList.add('hidden');
+      
+      if (tabName === 'vocab') {
+        document.getElementById('vocab-tab').classList.add('active');
+        document.getElementById('vocab-section').classList.remove('hidden');
+      } else if (tabName === 'stereotypes') {
+        document.getElementById('stereotypes-tab').classList.add('active');
+        document.getElementById('stereotypes-section').classList.remove('hidden');
+      } else if (tabName === 'reading') {
+        document.getElementById('reading-tab').classList.add('active');
+        document.getElementById('reading-section').classList.remove('hidden');
+      } else if (tabName === 'grammar') {
+        document.getElementById('grammar-tab').classList.add('active');
+        document.getElementById('grammar-section').classList.remove('hidden');
+      }
+      
+      if (window.elementSdk && window.elementSdk.config) {
+        onConfigChange(window.elementSdk.config);
+      }
+    }
+
+    document.getElementById('vocab-tab').addEventListener('click', () => switchTab('vocab'));
+    document.getElementById('stereotypes-tab').addEventListener('click', () => switchTab('stereotypes'));
+    document.getElementById('reading-tab').addEventListener('click', () => switchTab('reading'));
+    document.getElementById('grammar-tab').addEventListener('click', () => switchTab('grammar'));
+
+    // Load reading quiz
+    function loadReadingQuiz() {
+      const container = document.getElementById('reading-quiz-container');
+      container.innerHTML = '';
+      
+      readingQuestions.forEach((q, qIndex) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'mb-6';
+        questionDiv.innerHTML = `
+          <p class="font-bold mb-3">${q.question}</p>
+          <div class="space-y-2">
+            ${q.options.map((opt, oIndex) => `
+              <div class="quiz-option p-3 rounded-lg border-2 border-gray-300 cursor-pointer" data-question="${qIndex}" data-option="${oIndex}">
+                ${opt}
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(questionDiv);
+      });
+
+      document.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+          const question = this.dataset.question;
+          document.querySelectorAll(`[data-question="${question}"]`).forEach(o => {
+            o.classList.remove('selected', 'ring-2', 'ring-blue-500');
+          });
+          this.classList.add('selected', 'ring-2', 'ring-blue-500');
+          readingAnswers[question] = parseInt(this.dataset.option);
+        });
+      });
+    }
+
+    document.getElementById('submit-reading').addEventListener('click', async function() {
+      let correctCount = 0;
+      
+      readingQuestions.forEach((q, index) => {
+        const options = document.querySelectorAll(`[data-question="${index}"]`);
+        const userAnswer = readingAnswers[index];
+        
+        options.forEach((opt, oIndex) => {
+          if (oIndex === q.correct) {
+            opt.classList.add('correct');
+            if (userAnswer === oIndex) {
+              correctCount++;
+              playCorrectSound();
             }
-        ];
+          } else if (oIndex === userAnswer) {
+            opt.classList.add('incorrect');
+            playIncorrectSound();
+          }
+        });
+      });
 
-        // Reading quiz questions
-        const readingQuestions = [
-            {
-                question: "According to the passage, what has become a significant issue in modern families?",
-                options: [
-                    "Technology problems",
-                    "The generation gap between parents and teenagers",
-                    "Financial difficulties",
-                    "Educational challenges"
-                ],
-                correct: 1
-            },
-            {
-                question: "What do teenagers often complain about according to the text?",
-                options: [
-                    "Too much homework",
-                    "Not enough friends",
-                    "Their parents being too controlling",
-                    "Having too much pocket money"
-                ],
-                correct: 2
-            },
-            {
-                question: "What household tasks are mentioned in the passage?",
-                options: [
-                    "Cooking and shopping",
-                    "Doing laundry and loading the dishwasher",
-                    "Gardening and cleaning windows",
-                    "Painting and repairing furniture"
-                ],
-                correct: 1
-            },
-            {
-                question: "How do some parents and teenagers differ regarding technology?",
-                options: [
-                    "Parents are more advanced than teenagers",
-                    "Both are equally skilled",
-                    "Parents have old-fashioned ideas while teenagers are technologically advanced",
-                    "Neither understands technology well"
-                ],
-                correct: 2
-            },
-            {
-                question: "What does the passage suggest both generations should do?",
-                options: [
-                    "Avoid each other completely",
-                    "Carry on working together and carry out their responsibilities",
-                    "Stop communicating",
-                    "Live in separate houses"
-                ],
-                correct: 1
-            }
-        ];
+      const feedback = document.getElementById('reading-feedback');
+      const percentage = Math.round((correctCount / readingQuestions.length) * 100);
+      feedback.textContent = `Kết quả: ${correctCount}/${readingQuestions.length} câu đúng (${percentage}%)`;
+      feedback.className = `mt-4 p-4 rounded-lg ${percentage >= 70 ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`;
+      feedback.classList.remove('hidden');
 
-        // Comprehensive grammar quiz
-        const comprehensiveQuestions = [
-            {
-                question: "She _____ English every day.",
-                options: ["study", "studies", "studying", "is studying"],
-                correct: 1
-            },
-            {
-                question: "They _____ TV right now.",
-                options: ["watch", "watches", "are watching", "is watching"],
-                correct: 2
-            },
-            {
-                question: "I _____ chocolate. (stative verb)",
-                options: ["am loving", "love", "loves", "loving"],
-                correct: 1
-            },
-            {
-                question: "The food _____ delicious. (linking verb)",
-                options: ["taste", "tastes", "is tasting", "tasted"],
-                correct: 1
-            },
-            {
-                question: "I studied hard, _____ I passed the exam.",
-                options: ["but", "and", "or", "so"],
-                correct: 1
-            },
-            {
-                question: "Never _____ such a beautiful sunset.",
-                options: ["I have seen", "have I seen", "I saw", "did I saw"],
-                correct: 1
-            },
-            {
-                question: "No sooner _____ arrived than it started raining.",
-                options: ["I had", "had I", "I have", "have I"],
-                correct: 1
-            },
-            {
-                question: "She _____ in London since 2010.",
-                options: ["lives", "is living", "has lived", "lived"],
-                correct: 2
-            },
-            {
-                question: "_____ you like coffee?",
-                options: ["Are", "Do", "Does", "Is"],
-                correct: 1
-            },
-            {
-                question: "He _____ his homework at the moment.",
-                options: ["does", "is doing", "do", "did"],
-                correct: 1
-            },
-            {
-                question: "I _____ the answer to this question.",
-                options: ["am knowing", "know", "knows", "knowing"],
-                correct: 1
-            },
-            {
-                question: "She _____ tired after the long journey.",
-                options: ["looks", "is looking", "look", "looking"],
-                correct: 0
-            },
-            {
-                question: "It was raining, _____ we stayed inside.",
-                options: ["and", "but", "so", "or"],
-                correct: 2
-            },
-            {
-                question: "Rarely _____ late to work.",
-                options: ["she comes", "does she come", "she come", "come she"],
-                correct: 1
-            },
-            {
-                question: "At no time _____ the problem.",
-                options: ["he mentioned", "did he mention", "he mentions", "does he mention"],
-                correct: 1
-            },
-            {
-                question: "They _____ football every weekend.",
-                options: ["play", "plays", "are playing", "playing"],
-                correct: 0
-            },
-            {
-                question: "Listen! Someone _____ at the door.",
-                options: ["knock", "knocks", "is knocking", "knocking"],
-                correct: 2
-            },
-            {
-                question: "This book _____ to me.",
-                options: ["is belonging", "belong", "belongs", "belonging"],
-                correct: 2
-            },
-            {
-                question: "The weather _____ nice today.",
-                options: ["seem", "seems", "is seeming", "seeming"],
-                correct: 1
-            },
-            {
-                question: "I wanted to go out, _____ it was too late.",
-                options: ["and", "but", "so", "or"],
-                correct: 1
-            },
-            {
-                question: "Not only _____ hard, but he also helped others.",
-                options: ["he studied", "did he study", "he studies", "does he study"],
-                correct: 1
-            },
-            {
-                question: "No longer _____ here.",
-                options: ["she lives", "does she live", "she live", "live she"],
-                correct: 1
-            },
-            {
-                question: "Water _____ at 100 degrees Celsius.",
-                options: ["boil", "boils", "is boiling", "boiling"],
-                correct: 1
-            },
-            {
-                question: "We _____ dinner at 7 PM every day.",
-                options: ["have", "has", "are having", "having"],
-                correct: 0
-            },
-            {
-                question: "I _____ what you mean.",
-                options: ["am understanding", "understand", "understands", "understanding"],
-                correct: 1
-            },
-            {
-                question: "The cake _____ wonderful.",
-                options: ["smell", "smells", "is smelling", "smelling"],
-                correct: 1
-            },
-            {
-                question: "She studied medicine, _____ she became a doctor.",
-                options: ["but", "and", "or", "so"],
-                correct: 1
-            },
-            {
-                question: "Seldom _____ such kindness.",
-                options: ["I have seen", "have I seen", "I see", "do I see"],
-                correct: 1
-            },
-            {
-                question: "No way _____ that decision.",
-                options: ["I will accept", "will I accept", "I accept", "do I accept"],
-                correct: 1
-            },
-            {
-                question: "The sun _____ in the east.",
-                options: ["rise", "rises", "is rising", "rising"],
-                correct: 1
-            }
-        ];
+      this.disabled = true;
+      await saveProgress();
+    });
 
-        // Global variables
-        let currentWordIndex = 0;
-        let isFlipped = false;
-        let currentTab = 'vocabulary';
-        let progressData = {
-            vocabulary_progress: 0,
-            reading_progress: 0,
-            grammar_progress: 0,
-            completed_exercises: ""
-        };
-
-        // Data SDK setup
-        const dataHandler = {
-            onDataChanged(data) {
-                if (data.length > 0) {
-                    const latest = data[data.length - 1];
-                    progressData = { ...latest };
-                    updateProgressDisplay();
-                }
-            }
-        };
-
-        // Element SDK setup
-        const defaultConfig = {
-            unit_title: "Unit 1: Generation Gap and Independent Life",
-            home_url: "https://nckhthptnk.github.io/tienganh11/"
-        };
-
-        async function onConfigChange(config) {
-            const unitTitle = config.unit_title || defaultConfig.unit_title;
-            const homeUrl = config.home_url || defaultConfig.home_url;
-            
-            // Update both desktop and mobile titles
-            const desktopTitle = document.getElementById('unit-title');
-            const mobileTitle = document.getElementById('unit-title-mobile');
-            
-            if (desktopTitle) desktopTitle.textContent = unitTitle;
-            if (mobileTitle) mobileTitle.textContent = unitTitle;
-            
-            // Update all home links
-            document.querySelectorAll('a[href]').forEach(link => {
-                if (link.href.includes('nckhthptnk.github.io') || link.href === homeUrl) {
-                    link.href = homeUrl;
-                }
-            });
+    // Load grammar quiz
+    function updateGrammarQuestion() {
+      const question = grammarQuestions[currentGrammarIndex];
+      const userAnswer = grammarAnswers[currentGrammarIndex];
+      
+      document.getElementById('grammar-question').textContent = question.question;
+      document.getElementById('grammar-counter').textContent = `${currentGrammarIndex + 1} / ${grammarQuestions.length}`;
+      
+      const progress = ((currentGrammarIndex + 1) / grammarQuestions.length) * 100;
+      document.getElementById('grammar-progress-bar').style.width = `${progress}%`;
+      
+      const optionsContainer = document.getElementById('grammar-options');
+      optionsContainer.innerHTML = '';
+      
+      question.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'quiz-option p-4 rounded-lg border-2 border-gray-300 cursor-pointer transition-all';
+        optionDiv.textContent = option;
+        optionDiv.dataset.index = index;
+        
+        if (userAnswer !== undefined) {
+          optionDiv.style.pointerEvents = 'none';
+          if (index === question.correct) {
+            optionDiv.classList.add('correct');
+          } else if (index === userAnswer) {
+            optionDiv.classList.add('incorrect');
+          }
+        } else {
+          optionDiv.addEventListener('click', function() {
+            selectGrammarAnswer(index);
+          });
         }
-
-        function mapToCapabilities(config) {
-            return {
-                recolorables: [],
-                borderables: [],
-                fontEditable: undefined,
-                fontSizeable: undefined
-            };
+        
+        optionsContainer.appendChild(optionDiv);
+      });
+      
+      const feedbackDiv = document.getElementById('grammar-feedback-box');
+      if (userAnswer !== undefined) {
+        const isCorrect = userAnswer === question.correct;
+        feedbackDiv.classList.remove('hidden');
+        
+        document.getElementById('grammar-feedback-icon').textContent = isCorrect ? '✅' : '❌';
+        document.getElementById('grammar-feedback-text').textContent = isCorrect ? 'Chính xác!' : 'Chưa đúng!';
+        document.getElementById('grammar-feedback-explanation').textContent = question.explanation;
+        
+        if (isCorrect) {
+          playCorrectSound();
+        } else {
+          playIncorrectSound();
         }
+      } else {
+        feedbackDiv.classList.add('hidden');
+      }
+      
+      document.getElementById('grammar-prev-btn').disabled = currentGrammarIndex === 0;
+      document.getElementById('grammar-next-btn').disabled = currentGrammarIndex === grammarQuestions.length - 1;
+    }
 
-        function mapToEditPanelValues(config) {
-            return new Map([
-                ["unit_title", config.unit_title || defaultConfig.unit_title],
-                ["home_url", config.home_url || defaultConfig.home_url]
-            ]);
+    function selectGrammarAnswer(answerIndex) {
+      grammarAnswers[currentGrammarIndex] = answerIndex;
+      updateGrammarQuestion();
+      saveProgress();
+    }
+
+    // Grammar navigation
+    document.getElementById('grammar-prev-btn').addEventListener('click', function() {
+      if (currentGrammarIndex > 0) {
+        currentGrammarIndex--;
+        updateGrammarQuestion();
+      }
+    });
+
+    document.getElementById('grammar-next-btn').addEventListener('click', function() {
+      if (currentGrammarIndex < grammarQuestions.length - 1) {
+        currentGrammarIndex++;
+        updateGrammarQuestion();
+      }
+    });
+
+    // Grammar toggles
+    document.querySelectorAll('.grammar-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        const targetId = this.dataset.target;
+        const content = document.getElementById(targetId);
+        const icon = this.querySelector('span:last-child');
+        
+        content.classList.toggle('active');
+        icon.textContent = content.classList.contains('active') ? '−' : '+';
+        
+        if (targetId === 'comprehensive-test' && content.classList.contains('active')) {
+          updateGrammarQuestion();
         }
+      });
+    });
 
-        // Initialize SDKs
-        async function initializeApp() {
-            if (window.elementSdk) {
-                await window.elementSdk.init({
-                    defaultConfig,
-                    onConfigChange,
-                    mapToCapabilities,
-                    mapToEditPanelValues
-                });
-            }
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-4 right-4 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
 
-            if (window.dataSdk) {
-                const initResult = await window.dataSdk.init(dataHandler);
-                if (!initResult.isOk) {
-                    console.error("Failed to initialize data SDK");
-                }
-            }
-
-            initializeVocabulary();
-            initializeTabs();
-            initializeReading();
-            initializeGrammar();
-            setupKeyboardControls();
-        }
-
-        // Progress functions
-        function updateProgressDisplay() {
-            const total = Math.round((progressData.vocabulary_progress + progressData.reading_progress + progressData.grammar_progress) / 3);
-            
-            document.getElementById('total-progress').textContent = total + '%';
-            document.getElementById('vocab-progress').textContent = progressData.vocabulary_progress + '%';
-            document.getElementById('reading-progress').textContent = progressData.reading_progress + '%';
-            document.getElementById('grammar-progress').textContent = progressData.grammar_progress + '%';
-            
-            document.getElementById('total-bar').style.width = total + '%';
-            document.getElementById('vocab-bar').style.width = progressData.vocabulary_progress + '%';
-            document.getElementById('reading-bar').style.width = progressData.reading_progress + '%';
-            document.getElementById('grammar-bar').style.width = progressData.grammar_progress + '%';
-        }
-
-        async function saveProgress() {
-            if (window.dataSdk) {
-                const result = await window.dataSdk.create(progressData);
-                if (!result.isOk) {
-                    console.error("Failed to save progress");
-                }
-            }
-        }
-
-        // Vocabulary functions
-        function initializeVocabulary() {
-            updateVocabularyCard();
-            generateVocabularyQuiz();
-            
-            document.getElementById('next-word').addEventListener('click', nextWord);
-            document.getElementById('prev-word').addEventListener('click', prevWord);
-            document.getElementById('flip-card').addEventListener('click', flipCard);
-            document.getElementById('check-vocabulary').addEventListener('click', checkVocabularyAnswers);
-            
-            // Mode toggle buttons
-            document.getElementById('learn-mode-btn').addEventListener('click', () => switchVocabularyMode('learn'));
-            document.getElementById('test-mode-btn').addEventListener('click', () => switchVocabularyMode('test'));
-        }
-
-        function switchVocabularyMode(mode) {
-            const learnBtn = document.getElementById('learn-mode-btn');
-            const testBtn = document.getElementById('test-mode-btn');
-            const learnMode = document.getElementById('learn-mode');
-            const testMode = document.getElementById('test-mode');
-            
-            if (mode === 'learn') {
-                // Update buttons
-                learnBtn.classList.remove('text-gray-600', 'hover:text-blue-600');
-                learnBtn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
-                testBtn.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
-                testBtn.classList.add('text-gray-600', 'hover:text-blue-600');
-                
-                // Update content
-                learnMode.classList.remove('hidden');
-                testMode.classList.add('hidden');
-                
-                // Reset flashcard state
-                isFlipped = false;
-                document.getElementById('flashcard').classList.remove('flipped');
-            } else {
-                // Update buttons
-                testBtn.classList.remove('text-gray-600', 'hover:text-blue-600');
-                testBtn.classList.add('bg-blue-600', 'text-white', 'shadow-md');
-                learnBtn.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
-                learnBtn.classList.add('text-gray-600', 'hover:text-blue-600');
-                
-                // Update content
-                testMode.classList.remove('hidden');
-                learnMode.classList.add('hidden');
-                
-                // Reset quiz results
-                document.getElementById('vocabulary-result').textContent = '';
-                document.querySelectorAll('#vocabulary-quiz .quiz-option').forEach(option => {
-                    option.classList.remove('correct', 'incorrect');
-                });
-            }
-        }
-
-        function updateVocabularyCard() {
-            const word = vocabulary[currentWordIndex];
-            document.getElementById('word-text').textContent = word.word;
-            document.getElementById('word-type').textContent = word.type;
-            document.getElementById('word-ipa').textContent = word.ipa;
-            document.getElementById('word-meaning').textContent = word.meaning;
-            document.getElementById('word-example').textContent = word.example;
-            document.getElementById('word-counter').textContent = `${currentWordIndex + 1} / ${vocabulary.length}`;
-            
-            // Reset flip state
-            isFlipped = false;
-            document.getElementById('flashcard').classList.remove('flipped');
-            
-            // Auto-pronounce the word
-            setTimeout(() => {
-                pronounceWord(word.word);
-            }, 300);
-        }
-
-        function nextWord() {
-            if (currentWordIndex < vocabulary.length - 1) {
-                currentWordIndex++;
-                updateVocabularyCard();
-                updateVocabularyProgress();
-            }
-        }
-
-        function prevWord() {
-            if (currentWordIndex > 0) {
-                currentWordIndex--;
-                updateVocabularyCard();
-            }
-        }
-
-        function flipCard() {
-            isFlipped = !isFlipped;
-            document.getElementById('flashcard').classList.toggle('flipped');
-        }
-
-        function updateVocabularyProgress() {
-            const progress = Math.round(((currentWordIndex + 1) / vocabulary.length) * 100);
-            progressData.vocabulary_progress = progress;
-            updateProgressDisplay();
-            saveProgress();
-        }
-
-        function generateVocabularyQuiz() {
-            const quizContainer = document.getElementById('vocabulary-quiz');
-            quizContainer.innerHTML = '';
-            
-            vocabularyQuestions.forEach((q, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'bg-white p-4 rounded-lg border';
-                questionDiv.innerHTML = `
-                    <h5 class="font-semibold mb-3">${index + 1}. ${q.question}</h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        ${q.options.map((option, optIndex) => `
-                            <label class="flex items-center p-2 rounded cursor-pointer quiz-option border hover:bg-gray-50">
-                                <input type="radio" name="vocab-q${index}" value="${optIndex}" class="mr-3">
-                                <span>${String.fromCharCode(65 + optIndex)}. ${option}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                `;
-                quizContainer.appendChild(questionDiv);
-            });
-        }
-
-        function checkVocabularyAnswers() {
-            let correct = 0;
-            vocabularyQuestions.forEach((q, index) => {
-                const selected = document.querySelector(`input[name="vocab-q${index}"]:checked`);
-                const options = document.querySelectorAll(`input[name="vocab-q${index}"]`);
-                
-                options.forEach((option, optIndex) => {
-                    const label = option.closest('.quiz-option');
-                    label.classList.remove('correct', 'incorrect');
-                    
-                    if (optIndex === q.correct) {
-                        label.classList.add('correct');
-                    } else if (selected && parseInt(selected.value) === optIndex) {
-                        label.classList.add('incorrect');
-                    }
-                });
-                
-                if (selected && parseInt(selected.value) === q.correct) {
-                    correct++;
-                    playSound('correct');
-                } else {
-                    playSound('incorrect');
-                }
-            });
-            
-            const percentage = Math.round((correct / vocabularyQuestions.length) * 100);
-            document.getElementById('vocabulary-result').textContent = `Kết quả: ${correct}/${vocabularyQuestions.length} (${percentage}%)`;
-            
-            if (percentage >= 80) {
-                playSound('success');
-                progressData.vocabulary_progress = Math.max(progressData.vocabulary_progress, 100);
-            } else {
-                progressData.vocabulary_progress = Math.max(progressData.vocabulary_progress, percentage);
-            }
-            
-            updateProgressDisplay();
-            saveProgress();
-        }
-
-        // Tab functions
-        function initializeTabs() {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const tab = e.target.dataset.tab;
-                    switchTab(tab);
-                });
-            });
-        }
-
-        function switchTab(tab) {
-            // Update tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('border-blue-600', 'text-blue-600', 'bg-blue-50');
-                btn.classList.add('border-transparent', 'text-gray-600');
-            });
-            
-            const activeTab = document.querySelector(`[data-tab="${tab}"]`);
-            activeTab.classList.remove('border-transparent', 'text-gray-600');
-            activeTab.classList.add('border-blue-600', 'text-blue-600', 'bg-blue-50');
-            
-            // Update content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-            
-            document.getElementById(`${tab}-content`).classList.remove('hidden');
-            currentTab = tab;
-        }
-
-        // Reading functions
-        function initializeReading() {
-            generateReadingQuiz();
-            document.getElementById('check-reading').addEventListener('click', checkReadingAnswers);
-        }
-
-        function generateReadingQuiz() {
-            const quizContainer = document.getElementById('reading-quiz');
-            quizContainer.innerHTML = '';
-            
-            readingQuestions.forEach((q, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'bg-white p-4 rounded-lg border';
-                questionDiv.innerHTML = `
-                    <h5 class="font-semibold mb-3">${index + 1}. ${q.question}</h5>
-                    <div class="space-y-2">
-                        ${q.options.map((option, optIndex) => `
-                            <label class="flex items-center p-2 rounded cursor-pointer quiz-option border hover:bg-gray-50">
-                                <input type="radio" name="reading-q${index}" value="${optIndex}" class="mr-3">
-                                <span>${String.fromCharCode(65 + optIndex)}. ${option}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                `;
-                quizContainer.appendChild(questionDiv);
-            });
-        }
-
-        function checkReadingAnswers() {
-            let correct = 0;
-            readingQuestions.forEach((q, index) => {
-                const selected = document.querySelector(`input[name="reading-q${index}"]:checked`);
-                const options = document.querySelectorAll(`input[name="reading-q${index}"]`);
-                
-                options.forEach((option, optIndex) => {
-                    const label = option.closest('.quiz-option');
-                    label.classList.remove('correct', 'incorrect');
-                    
-                    if (optIndex === q.correct) {
-                        label.classList.add('correct');
-                    } else if (selected && parseInt(selected.value) === optIndex) {
-                        label.classList.add('incorrect');
-                    }
-                });
-                
-                if (selected && parseInt(selected.value) === q.correct) {
-                    correct++;
-                    playSound('correct');
-                } else {
-                    playSound('incorrect');
-                }
-            });
-            
-            const percentage = Math.round((correct / readingQuestions.length) * 100);
-            document.getElementById('reading-result').textContent = `Kết quả: ${correct}/${readingQuestions.length} (${percentage}%)`;
-            
-            progressData.reading_progress = percentage;
-            updateProgressDisplay();
-            saveProgress();
-        }
-
-        // Grammar functions
-        function initializeGrammar() {
-            document.querySelectorAll('.grammar-topic').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const topic = e.target.dataset.topic;
-                    showGrammarTopic(topic);
-                });
-            });
-        }
-
-        function showGrammarTopic(topic) {
-            // Hide all grammar content
-            document.querySelectorAll('.grammar-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Show selected topic
-            const topicContent = document.getElementById(topic);
-            if (topicContent) {
-                topicContent.classList.add('active');
-                
-                if (topic === 'comprehensive-test') {
-                    generateComprehensiveQuiz();
-                    document.getElementById('check-comprehensive').addEventListener('click', checkComprehensiveAnswers);
-                }
-            }
-        }
-
-        function generateComprehensiveQuiz() {
-            const quizContainer = document.getElementById('comprehensive-quiz');
-            quizContainer.innerHTML = '';
-            
-            comprehensiveQuestions.forEach((q, index) => {
-                const questionDiv = document.createElement('div');
-                questionDiv.className = 'bg-white p-4 rounded-lg border mb-4';
-                questionDiv.innerHTML = `
-                    <h5 class="font-semibold mb-3">${index + 1}. ${q.question}</h5>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        ${q.options.map((option, optIndex) => `
-                            <label class="flex items-center p-2 rounded cursor-pointer quiz-option border hover:bg-gray-50">
-                                <input type="radio" name="comp-q${index}" value="${optIndex}" class="mr-3">
-                                <span>${String.fromCharCode(65 + optIndex)}. ${option}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                `;
-                quizContainer.appendChild(questionDiv);
-            });
-        }
-
-        function checkComprehensiveAnswers() {
-            let correct = 0;
-            comprehensiveQuestions.forEach((q, index) => {
-                const selected = document.querySelector(`input[name="comp-q${index}"]:checked`);
-                const options = document.querySelectorAll(`input[name="comp-q${index}"]`);
-                
-                options.forEach((option, optIndex) => {
-                    const label = option.closest('.quiz-option');
-                    label.classList.remove('correct', 'incorrect');
-                    
-                    if (optIndex === q.correct) {
-                        label.classList.add('correct');
-                    } else if (selected && parseInt(selected.value) === optIndex) {
-                        label.classList.add('incorrect');
-                    }
-                });
-                
-                if (selected && parseInt(selected.value) === q.correct) {
-                    correct++;
-                }
-            });
-            
-            const percentage = Math.round((correct / comprehensiveQuestions.length) * 100);
-            document.getElementById('comprehensive-result').textContent = `Kết quả: ${correct}/${comprehensiveQuestions.length} (${percentage}%)`;
-            
-            if (percentage >= 70) {
-                playSound('success');
-                progressData.grammar_progress = 100;
-            } else {
-                playSound('incorrect');
-                progressData.grammar_progress = Math.max(progressData.grammar_progress, percentage);
-            }
-            
-            updateProgressDisplay();
-            saveProgress();
-        }
-
-        // Keyboard controls
-        function setupKeyboardControls() {
-            document.addEventListener('keydown', (e) => {
-                if (currentTab === 'vocabulary') {
-                    switch(e.code) {
-                        case 'Space':
-                            e.preventDefault();
-                            flipCard();
-                            break;
-                        case 'ArrowLeft':
-                            e.preventDefault();
-                            prevWord();
-                            break;
-                        case 'ArrowRight':
-                            e.preventDefault();
-                            nextWord();
-                            break;
-                    }
-                }
-            });
-        }
-
-        // Sound functions with pronunciation
-        function playSound(type) {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            switch(type) {
-                case 'correct':
-                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
-                    break;
-                case 'incorrect':
-                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime);
-                    oscillator.frequency.setValueAtTime(200, audioContext.currentTime + 0.1);
-                    break;
-                case 'success':
-                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
-                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.1);
-                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.2);
-                    break;
-                case 'pronunciation':
-                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-                    break;
-            }
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.3);
-        }
-
-        // Text-to-speech pronunciation
-        function pronounceWord(word) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(word);
-                utterance.lang = 'en-US';
-                utterance.rate = 0.8;
-                utterance.pitch = 1;
-                utterance.volume = 0.8;
-                speechSynthesis.speak(utterance);
-            } else {
-                // Fallback to beep sound
-                playSound('pronunciation');
-            }
-        }
-
-        // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', initializeApp);
-    </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9969d3e9f311fdb6',t:'MTc2MTgxNTkzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    // Initialize
+    initDataSdk();
+    updateFlashcard();
+    loadReadingQuiz();
+    updateAllProgress();
+    
+    if (window.elementSdk && window.elementSdk.config) {
+      onConfigChange(window.elementSdk.config);
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99b5df2b136b3d7d',t:'MTc2MjYxMzMxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
